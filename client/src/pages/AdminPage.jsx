@@ -50,10 +50,10 @@ function AdminPage() {
     try {
       // 필터링된 데이터와 전체 데이터 모두 가져오기
       const [filteredRes, allRes] = await Promise.all([
-        axios.get('http://localhost:3001/api/applications', {
+        axios.get('/api/applications', {
           params: filter !== 'all' ? { status: filter } : {}
         }),
-        filter !== 'all' ? axios.get('http://localhost:3001/api/applications') : Promise.resolve(null)
+        filter !== 'all' ? axios.get('/api/applications') : Promise.resolve(null)
       ]);
 
       if (filteredRes.data.success) {
@@ -79,7 +79,7 @@ function AdminPage() {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      const response = await axios.patch(`http://localhost:3001/api/applications/${id}`, {
+      const response = await axios.patch(`/api/applications/${id}`, {
         status: newStatus
       });
 
@@ -98,7 +98,7 @@ function AdminPage() {
     }
 
     try {
-      const response = await axios.delete(`http://localhost:3001/api/applications/${id}`);
+      const response = await axios.delete(`/api/applications/${id}`);
 
       if (response.data.success) {
         alert('신청이 삭제되었습니다.');

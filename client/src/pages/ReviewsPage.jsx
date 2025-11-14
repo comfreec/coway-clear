@@ -20,7 +20,7 @@ function ReviewsPage() {
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3001/api/reviews');
+      const response = await axios.get('/api/reviews');
       if (response.data.success) {
         setReviews(response.data.reviews);
       }
@@ -45,7 +45,7 @@ function ReviewsPage() {
     setSubmitStatus(null);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/reviews', formData);
+      const response = await axios.post('/api/reviews', formData);
 
       if (response.data.success) {
         setSubmitStatus({

@@ -1,7 +1,12 @@
 const admin = require('firebase-admin');
+const path = require('path');
 
 // Firebase Admin 초기화
-admin.initializeApp();
+const serviceAccount = require(path.join(__dirname, '..', 'serviceAccountKey.json'));
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 const db = admin.firestore();
 
 async function initializeFirestore() {

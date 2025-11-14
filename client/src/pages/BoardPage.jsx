@@ -13,7 +13,7 @@ function BoardPage() {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3001/api/posts');
+      const response = await axios.get('/api/posts');
       if (response.data.success) {
         setPosts(response.data.posts);
       }

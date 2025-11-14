@@ -29,7 +29,7 @@ function ApplicationPage() {
     setSubmitStatus(null);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/applications', formData);
+      const response = await axios.post('/api/applications', formData);
 
       if (response.data.success) {
         setSubmitStatus({

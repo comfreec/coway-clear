@@ -25,7 +25,7 @@ function BoardWritePage() {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/posts', formData);
+      const response = await axios.post('/api/posts', formData);
 
       if (response.data.success) {
         alert('게시글이 등록되었습니다.');

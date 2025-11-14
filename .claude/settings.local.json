@@ -36,7 +36,17 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(del nul)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(start https://vercel.com/new)",
+      "Bash(node init-firestore.js:*)",
+      "Bash(start https://console.firebase.google.com/project/freeclean-mattress/settings/serviceaccounts/adminsdk)",
+      "Bash(start https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=freeclean-mattress)",
+      "Bash(start https://console.firebase.google.com/project/freeclean-mattress/firestore)",
+      "Bash(start notepad VERCEL_DEPLOY.md)",
+      "Bash(start https://free-clean-mattress.vercel.app)"
     ],
     "deny": [],
     "ask": []

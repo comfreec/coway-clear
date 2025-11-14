@@ -20,7 +20,7 @@ function BoardDetailPage() {
 
   const fetchPost = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/posts/${id}`);
+      const response = await axios.get(`/api/posts/${id}`);
       if (response.data.success) {
         setPost(response.data.post);
       }
@@ -35,7 +35,7 @@ function BoardDetailPage() {
 
   const fetchComments = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/posts/${id}/comments`);
+      const response = await axios.get(`/api/posts/${id}/comments`);
       if (response.data.success) {
         setComments(response.data.comments);
       }
@@ -57,7 +57,7 @@ function BoardDetailPage() {
 
     try {
       const response = await axios.post(
-        `http://localhost:3001/api/posts/${id}/comments`,
+        `/api/posts/${id}/comments`,
         commentForm
       );
 

@@ -11,7 +11,7 @@ function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/products');
+      const response = await axios.get('/api/products');
       if (response.data.success) {
         setProducts(response.data.products);
       }
