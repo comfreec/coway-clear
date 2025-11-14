@@ -1,6 +1,6 @@
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 
-// Firebase Admin 초기화 (Vercel 환경 변수 사용)
+// Firebase Admin 초기화
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -18,7 +18,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 // Vercel Serverless Function Handler
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   // CORS 헤더 설정
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
@@ -295,4 +295,4 @@ module.exports = async (req, res) => {
       error: error.message
     });
   }
-};
+}
