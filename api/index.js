@@ -12,6 +12,12 @@ function initializeFirebase() {
     // 방법 1: 전체 Service Account JSON 사용
     if (process.env.FIREBASE_SERVICE_ACCOUNT) {
       const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+      // private_key의 \n을 실제 개행으로 변환
+      if (serviceAccount.private_key) {
+        serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+      }
+
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
       });
