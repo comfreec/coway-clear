@@ -277,7 +277,67 @@ function AdminPage() {
 
         {/* 신청 목록 */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* 모바일 카드 뷰 */}
+          <div className="block md:hidden">
+            {applications.map((app) => (
+              <div key={app.id} className="border-b border-gray-200 p-4 hover:bg-gray-50">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <div className="font-bold text-lg text-gray-900">{app.name}</div>
+                    <div className="text-sm text-gray-500">{formatDate(app.created_at)}</div>
+                  </div>
+                  {getStatusBadge(app.status)}
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-semibold">연락처:</span> {app.phone}
+                  </div>
+                  <div>
+                    <span className="font-semibold">주소:</span><br/>
+                    {app.address}
+                    {app.detail_address && ` ${app.detail_address}`}
+                  </div>
+                  <div>
+                    <span className="font-semibold">매트리스:</span> {app.mattress_type || '-'} ({app.mattress_age || '-'})
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-2">
+                  <select
+                    value={app.status}
+                    onChange={(e) => updateStatus(app.id, e.target.value)}
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+                  >
+                    <option value="pending">대기중</option>
+                    <option value="confirmed">확정</option>
+                    <option value="completed">완료</option>
+                    <option value="cancelled">취소</option>
+                  </select>
+
+                  <div className="flex gap-2">
+                    {app.status !== 'completed' && (
+                      <button
+                        onClick={() => updateStatus(app.id, 'completed')}
+                        className="flex-1 bg-green-500 text-white px-4 py-2 rounded text-sm font-semibold"
+                      >
+                        ✓ 완료 처리
+                      </button>
+                    )}
+                    <button
+                      onClick={() => deleteApplication(app.id, app.name)}
+                      className="flex-1 bg-red-500 text-white px-4 py-2 rounded text-sm font-semibold"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 데스크톱 테이블 뷰 */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
@@ -373,10 +433,17 @@ function AdminPage() {
                 ))}
               </tbody>
             </table>
+
+            {applications.length === 0 && (
+              <div className="text-center py-12 text-gray-500">
+                신청 내역이 없습니다
+              </div>
+            )}
           </div>
 
+          {/* 모바일 빈 목록 */}
           {applications.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
+            <div className="block md:hidden text-center py-12 text-gray-500">
               신청 내역이 없습니다
             </div>
           )}

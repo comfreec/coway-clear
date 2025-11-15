@@ -30,7 +30,7 @@ function HomePage() {
   return (
     <div>
       {/* Hero Section - 개선된 디자인 */}
-      <section className="relative bg-gradient-to-br from-coway-blue via-coway-navy to-blue-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-coway-blue via-coway-navy to-blue-900 text-white py-12 md:py-24 overflow-hidden">
         {/* 배경 패턴 */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
@@ -38,39 +38,39 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="inline-block mb-4 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold">
+          <div className="inline-block mb-3 md:mb-4 px-3 md:px-4 py-1.5 md:py-2 bg-white/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-semibold">
             ✨ 건강한 수면의 시작
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight px-2">
             지금 무료로<br />
             <span className="text-yellow-300">매트리스 케어</span> 받으세요
           </h1>
 
-          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 text-blue-100 max-w-2xl mx-auto px-4">
             전문가의 무료 진단부터 99.9% 진드기 제거까지
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center mb-6 md:mb-8 px-4">
             <Link
               to="/application"
-              className="inline-flex items-center bg-white text-coway-blue px-10 py-4 rounded-full text-lg font-bold hover:bg-yellow-300 hover:text-coway-navy transition-all transform hover:scale-105 shadow-xl"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-coway-blue px-6 sm:px-8 md:px-10 py-3 md:py-4 rounded-full text-base md:text-lg font-bold hover:bg-yellow-300 hover:text-coway-navy transition-all transform hover:scale-105 shadow-xl"
             >
               <span>무료 신청하기</span>
-              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="ml-2 w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>
 
             <Link
               to="/board"
-              className="inline-flex items-center bg-transparent border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-coway-blue transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-transparent border-2 border-white text-white px-6 sm:px-8 py-3 md:py-4 rounded-full text-base md:text-lg font-semibold hover:bg-white hover:text-coway-blue transition-all"
             >
               후기 보기
             </Link>
           </div>
 
-          <div className="flex justify-center gap-8 text-sm">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-xs md:text-sm px-4">
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-green-300" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -94,26 +94,26 @@ function HomePage() {
       </section>
 
       {/* 진드기 위험성 Section - 개선된 디자인 */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-12 md:py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-red-100 text-red-600 rounded-full text-sm font-semibold mb-4">
+          <div className="text-center mb-10 md:mb-16">
+            <div className="inline-block px-3 md:px-4 py-1.5 md:py-2 bg-red-100 text-red-600 rounded-full text-xs md:text-sm font-semibold mb-3 md:mb-4">
               ⚠️ 주의하세요
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 px-2">
               왜 매트리스 케어가 필요할까요?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               매일 밤 우리와 함께하는 매트리스, 과연 안전할까요?
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 border-t-4 border-red-500">
-              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6 mx-auto">
-                <span className="text-5xl">🦠</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 border-t-4 border-red-500">
+              <div className="w-16 h-16 md:w-20 md:h-20 bg-red-100 rounded-full flex items-center justify-center mb-4 md:mb-6 mx-auto">
+                <span className="text-4xl md:text-5xl">🦠</span>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-center">집먼지 진드기의 위험</h3>
+              <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-center">집먼지 진드기의 위험</h3>
               <p className="text-gray-600 text-center leading-relaxed">
                 매트리스 7년 사용 시 진드기 및 알레르기 유발물질 농도가
                 <strong className="text-red-600"> 극적으로 증가</strong>합니다.
