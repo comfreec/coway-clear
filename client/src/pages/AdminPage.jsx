@@ -78,7 +78,15 @@ function AdminPage() {
       }
     } catch (error) {
       console.error('데이터 로딩 실패:', error);
-      alert('데이터를 불러오는 중 오류가 발생했습니다.');
+      console.error('에러 상세:', error.response?.data);
+
+      // 상세한 에러 메시지 표시
+      const errorMessage = error.response?.data?.error
+        || error.response?.data?.message
+        || error.message
+        || '알 수 없는 오류';
+
+      alert(`데이터를 불러오는 중 오류가 발생했습니다.\n\n에러: ${errorMessage}\n\n브라우저 개발자 도구(F12)의 Console 탭에서 자세한 정보를 확인하세요.`);
     } finally {
       setLoading(false);
     }
