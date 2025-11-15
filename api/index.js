@@ -9,22 +9,45 @@ function initializeFirebase() {
   }
 
   try {
+    // 방법 1: 전체 Service Account JSON 사용
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+      const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+      });
+      console.log('Firebase initialized with service account JSON');
+      return admin.firestore();
+    }
+
+    // 방법 2: 개별 환경변수 사용
     const privateKey = process.env.FIREBASE_PRIVATE_KEY;
     if (!privateKey) {
-      throw new Error('FIREBASE_PRIVATE_KEY environment variable is not set');
+      throw new Error('Neither FIREBASE_SERVICE_ACCOUNT nor FIREBASE_PRIVATE_KEY is set');
+    }
+
+    // 여러 가지 escaping 시도
+    let processedKey = privateKey;
+    // 이미 실제 개행이면 그대로 사용
+    if (!processedKey.includes('\\n') && processedKey.includes('\n')) {
+      // 실제 개행 문자가 있음
+      processedKey = privateKey;
+    } else {
+      // \n을 실제 개행으로 변환
+      processedKey = privateKey.replace(/\\n/g, '\n');
     }
 
     admin.initializeApp({
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: privateKey.replace(/\\n/g, '\n')
+        privateKey: processedKey
       })
     });
-    console.log('Firebase initialized successfully');
+    console.log('Firebase initialized with individual credentials');
     return admin.firestore();
   } catch (error) {
     console.error('Firebase 초기화 에러:', error);
+    console.error('Error details:', error.message);
     throw error;
   }
 }
