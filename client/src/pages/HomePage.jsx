@@ -173,13 +173,13 @@ function HomePage() {
       </section>
 
       {/* 서비스 프로세스 - 개선된 타임라인 디자인 */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 px-2">
               케어 서비스 프로세스
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-base md:text-xl text-gray-600 px-4">
               간편한 4단계로 건강한 수면 환경을 만들어드립니다
             </p>
           </div>
@@ -189,7 +189,7 @@ function HomePage() {
               {/* 연결선 */}
               <div className="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-coway-blue to-coway-green transform -translate-y-1/2"></div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 relative z-10">
                 {[
                   { num: 1, icon: "📝", title: "신청", desc: "간편한 온라인 신청으로 시작하세요" },
                   { num: 2, icon: "📞", title: "방문 예약", desc: "편하신 시간에 전문가가 방문합니다" },
@@ -197,16 +197,16 @@ function HomePage() {
                   { num: 4, icon: "📊", title: "리포트 제공", desc: "케어 전후 상태를 리포트로 제공" }
                 ].map((step) => (
                   <div key={step.num} className="text-center">
-                    <div className="relative inline-block mb-4">
-                      <div className="w-24 h-24 bg-gradient-to-br from-coway-blue to-coway-green text-white rounded-full flex items-center justify-center text-4xl font-bold shadow-xl transform hover:scale-110 transition-transform">
+                    <div className="relative inline-block mb-3 md:mb-4">
+                      <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-coway-blue to-coway-green text-white rounded-full flex items-center justify-center text-3xl md:text-4xl font-bold shadow-xl transform hover:scale-110 transition-transform">
                         {step.num}
                       </div>
-                      <div className="absolute -top-2 -right-2 w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl shadow-lg">
+                      <div className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center text-xl md:text-2xl shadow-lg">
                         {step.icon}
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                    <p className="text-gray-600">{step.desc}</p>
+                    <h3 className="text-lg md:text-xl font-bold mb-2">{step.title}</h3>
+                    <p className="text-sm md:text-base text-gray-600 px-2">{step.desc}</p>
                   </div>
                 ))}
               </div>
@@ -248,13 +248,13 @@ function HomePage() {
       </section>
 
       {/* FAQ Section - 새로 추가 */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-12 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 px-2">
               자주 묻는 질문
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-base md:text-xl text-gray-600 px-4">
               궁금하신 사항을 확인해보세요
             </p>
           </div>
@@ -264,11 +264,11 @@ function HomePage() {
               <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden">
                 <button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full px-6 py-5 text-left flex justify-between items-center hover:bg-gray-50 transition"
+                  className="w-full px-4 md:px-6 py-4 md:py-5 text-left flex justify-between items-center hover:bg-gray-50 transition"
                 >
-                  <span className="font-semibold text-lg pr-8">{faq.q}</span>
+                  <span className="font-semibold text-sm md:text-lg pr-4 md:pr-8">{faq.q}</span>
                   <svg
-                    className={`w-6 h-6 text-coway-blue transition-transform ${
+                    className={`w-5 h-5 md:w-6 md:h-6 text-coway-blue transition-transform flex-shrink-0 ${
                       openFaq === index ? 'transform rotate-180' : ''
                     }`}
                     fill="none"
@@ -279,7 +279,7 @@ function HomePage() {
                   </svg>
                 </button>
                 {openFaq === index && (
-                  <div className="px-6 pb-5 text-gray-600 leading-relaxed">
+                  <div className="px-4 md:px-6 pb-4 md:pb-5 text-sm md:text-base text-gray-600 leading-relaxed">
                     {faq.a}
                   </div>
                 )}
@@ -290,26 +290,26 @@ function HomePage() {
       </section>
 
       {/* CTA Section - 개선된 디자인 */}
-      <section className="py-24 bg-gradient-to-r from-coway-blue via-blue-600 to-coway-navy text-white relative overflow-hidden">
+      <section className="py-12 md:py-24 bg-gradient-to-r from-coway-blue via-blue-600 to-coway-navy text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-300 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-green-300 rounded-full filter blur-3xl"></div>
         </div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 px-2">
             지금 바로 무료 케어를 신청하세요
           </h2>
-          <p className="text-xl md:text-2xl mb-10 text-blue-100 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-8 md:mb-10 text-blue-100 max-w-2xl mx-auto px-4">
             건강한 수면 환경을 위한 첫 걸음을 시작하세요
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
             <Link
               to="/application"
-              className="inline-flex items-center justify-center bg-white text-coway-blue px-12 py-5 rounded-full text-xl font-bold hover:bg-yellow-300 hover:text-coway-navy transition-all transform hover:scale-105 shadow-2xl"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-coway-blue px-8 md:px-12 py-4 md:py-5 rounded-full text-base md:text-xl font-bold hover:bg-yellow-300 hover:text-coway-navy transition-all transform hover:scale-105 shadow-2xl"
             >
-              <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 md:w-6 md:h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               무료 신청하기
@@ -317,16 +317,16 @@ function HomePage() {
 
             <a
               href="tel:010-2417-7936"
-              className="inline-flex items-center justify-center bg-transparent border-2 border-white text-white px-12 py-5 rounded-full text-xl font-bold hover:bg-white hover:text-coway-blue transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-transparent border-2 border-white text-white px-8 md:px-12 py-4 md:py-5 rounded-full text-base md:text-xl font-bold hover:bg-white hover:text-coway-blue transition-all"
             >
-              <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 md:w-6 md:h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
               전화 상담하기
             </a>
           </div>
 
-          <p className="mt-8 text-blue-200">
+          <p className="mt-6 md:mt-8 text-sm md:text-base text-blue-200 px-4">
             📞 010-2417-7936 | ⏰ 평일 09:00 - 18:00
           </p>
         </div>
