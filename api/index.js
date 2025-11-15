@@ -124,12 +124,16 @@ export default async function handler(req, res) {
         query = query.where('status', '==', status);
       }
 
-      const snapshot = await query.orderBy('created_at', 'desc').get();
+      // orderBy 제거 - Firestore 인덱스 에러 방지
+      // 클라이언트에서 정렬하도록 변경
+      const snapshot = await query.get();
       const applications = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
         created_at: doc.data().created_at?.toDate().toISOString()
-      }));
+      }))
+      // 클라이언트 측에서 정렬
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       return res.json({ success: true, applications });
     }
@@ -161,7 +165,7 @@ export default async function handler(req, res) {
 
     // 4. 제품 목록 조회
     if (path === '/products' && method === 'GET') {
-      const snapshot = await db.collection('products').orderBy('id').get();
+      const snapshot = await db.collection('products').get();
       const products = snapshot.docs.map(doc => {
         const data = doc.data();
         return {
@@ -169,19 +173,23 @@ export default async function handler(req, res) {
           ...data,
           features: Array.isArray(data.features) ? data.features : JSON.parse(data.features || '[]')
         };
-      });
+      })
+      // 클라이언트 측에서 정렬
+      .sort((a, b) => (a.id || 0) - (b.id || 0));
 
       return res.json({ success: true, products });
     }
 
     // 5. 리뷰 목록 조회
     if (path === '/reviews' && method === 'GET') {
-      const snapshot = await db.collection('reviews').orderBy('created_at', 'desc').get();
+      const snapshot = await db.collection('reviews').get();
       const reviews = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
         created_at: doc.data().created_at?.toDate().toISOString()
-      }));
+      }))
+      // 클라이언트 측에서 정렬
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       return res.json({ success: true, reviews });
     }
@@ -231,7 +239,7 @@ export default async function handler(req, res) {
 
     // 7. 게시글 목록 조회
     if (path === '/posts' && method === 'GET') {
-      const postsSnapshot = await db.collection('posts').orderBy('created_at', 'desc').get();
+      const postsSnapshot = await db.collection('posts').get();
       const posts = [];
 
       for (const doc of postsSnapshot.docs) {
@@ -247,6 +255,9 @@ export default async function handler(req, res) {
           comment_count: commentsSnapshot.data().count
         });
       }
+
+      // 클라이언트 측에서 정렬
+      posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       return res.json({ success: true, posts });
     }
@@ -303,14 +314,15 @@ export default async function handler(req, res) {
       const id = path.split('/')[2];
       const snapshot = await db.collection('comments')
         .where('post_id', '==', id)
-        .orderBy('created_at', 'asc')
         .get();
 
       const comments = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
         created_at: doc.data().created_at?.toDate().toISOString()
-      }));
+      }))
+      // 클라이언트 측에서 정렬
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
       return res.json({ success: true, comments });
     }
