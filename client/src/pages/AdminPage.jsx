@@ -48,22 +48,29 @@ function AdminPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // 필터링된 데이터와 전체 데이터 모두 가져오기
-      const [filteredRes, allRes] = await Promise.all([
-        axios.get('/api/applications', {
-          params: filter !== 'all' ? { status: filter } : {}
-        }),
-        filter !== 'all' ? axios.get('/api/applications') : Promise.resolve(null)
-      ]);
+      // 필터링된 데이터 가져오기
+      const response = await axios.get('/api/applications', {
+        params: filter !== 'all' ? { status: filter } : {}
+      });
 
-      if (filteredRes.data.success) {
-        setApplications(filteredRes.data.applications);
+      if (response.data.success) {
+        const displayApps = response.data.applications;
+        setApplications(displayApps);
+
+        // 필터가 적용된 경우 전체 데이터도 가져와서 통계 계산
+        let allApps = displayApps;
+        if (filter !== 'all') {
+          const allResponse = await axios.get('/api/applications');
+          if (allResponse.data.success) {
+            allApps = allResponse.data.applications;
+          }
+        }
 
         // 전체 데이터로 통계 계산
-        const allApps = allRes ? allRes.data.applications : filteredRes.data.applications;
         const calculatedStats = {
           totalApplications: allApps.length,
           pendingApplications: allApps.filter(a => a.status === 'pending').length,
+          confirmedApplications: allApps.filter(a => a.status === 'confirmed').length,
           completedApplications: allApps.filter(a => a.status === 'completed').length,
           totalReviews: 0
         };
@@ -201,29 +208,29 @@ function AdminPage() {
 
         {/* 통계 카드 */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="text-gray-500 text-sm mb-2">총 신청</div>
-              <div className="text-3xl font-bold text-coway-blue">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow">
+              <div className="text-gray-500 text-xs md:text-sm mb-2">총 신청</div>
+              <div className="text-2xl md:text-3xl font-bold text-coway-blue">
                 {stats.totalApplications}
               </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="text-gray-500 text-sm mb-2">대기중</div>
-              <div className="text-3xl font-bold text-yellow-600">
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow">
+              <div className="text-gray-500 text-xs md:text-sm mb-2">대기중</div>
+              <div className="text-2xl md:text-3xl font-bold text-yellow-600">
                 {stats.pendingApplications}
               </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="text-gray-500 text-sm mb-2">완료</div>
-              <div className="text-3xl font-bold text-green-600">
-                {stats.completedApplications}
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow">
+              <div className="text-gray-500 text-xs md:text-sm mb-2">확정</div>
+              <div className="text-2xl md:text-3xl font-bold text-blue-600">
+                {stats.confirmedApplications}
               </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="text-gray-500 text-sm mb-2">후기</div>
-              <div className="text-3xl font-bold text-purple-600">
-                {stats.totalReviews}
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow">
+              <div className="text-gray-500 text-xs md:text-sm mb-2">완료</div>
+              <div className="text-2xl md:text-3xl font-bold text-green-600">
+                {stats.completedApplications}
               </div>
             </div>
           </div>
