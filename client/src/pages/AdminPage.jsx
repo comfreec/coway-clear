@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Axios 인스턴스 생성 - Vercel 배포 환경에서도 작동하도록
+const api = axios.create({
+  baseURL: import.meta.env.PROD ? '' : '',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -49,7 +57,7 @@ function AdminPage() {
     setLoading(true);
     try {
       // 필터링된 데이터 가져오기
-      const response = await axios.get('/api/applications', {
+      const response = await api.get('/api/applications', {
         params: filter !== 'all' ? { status: filter } : {}
       });
 
@@ -60,7 +68,7 @@ function AdminPage() {
         // 필터가 적용된 경우 전체 데이터도 가져와서 통계 계산
         let allApps = displayApps;
         if (filter !== 'all') {
-          const allResponse = await axios.get('/api/applications');
+          const allResponse = await api.get('/api/applications');
           if (allResponse.data.success) {
             allApps = allResponse.data.applications;
           }
@@ -94,7 +102,7 @@ function AdminPage() {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      const response = await axios.patch(`/api/applications/${id}`, {
+      const response = await api.patch(`/api/applications/${id}`, {
         status: newStatus
       });
 
@@ -113,7 +121,7 @@ function AdminPage() {
     }
 
     try {
-      const response = await axios.delete(`/api/applications/${id}`);
+      const response = await api.delete(`/api/applications/${id}`);
 
       if (response.data.success) {
         alert('신청이 삭제되었습니다.');
