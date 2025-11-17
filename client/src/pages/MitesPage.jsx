@@ -1,35 +1,14 @@
 function MitesPage() {
   const miteImages = [
-    {
-      title: "매트리스 진드기 확대 사진",
-      description: "육안으로 보이지 않는 진드기가 매트리스 속에 수백만 마리 서식합니다",
-      imageUrl: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?w=800&auto=format&fit=crop&q=80"
-    },
-    {
-      title: "청소 전 진드기 서식 상태",
-      description: "일반 가정집 매트리스의 진드기 서식 밀도",
-      imageUrl: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&auto=format&fit=crop&q=80"
-    },
-    {
-      title: "청소 후 비교 결과",
-      description: "전문 케어 서비스 후 99.9% 제거된 상태",
-      imageUrl: "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?w=800&auto=format&fit=crop&q=80"
-    },
-    {
-      title: "진드기 배설물과 사체",
-      description: "알레르기와 아토피의 주요 원인물질",
-      imageUrl: "https://images.unsplash.com/photo-1582719471137-c3967ffb1c42?w=800&auto=format&fit=crop&q=80"
-    },
-    {
-      title: "진드기 생활 주기",
-      description: "3개월마다 진드기 개체수가 2배로 증가합니다",
-      imageUrl: "https://images.unsplash.com/photo-1614935151651-0bea6508db6b?w=800&auto=format&fit=crop&q=80"
-    },
-    {
-      title: "현미경으로 본 집먼지진드기",
-      description: "크기 0.1~0.5mm의 미세 해충",
-      imageUrl: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop&q=80"
-    }
+    "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?w=800&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop&q=80"
   ];
 
   return (
@@ -108,29 +87,18 @@ function MitesPage() {
         {/* 이미지 갤러리 */}
         <div className="mb-12">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">
-            진드기 확대 사진
+            진드기 사진
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {miteImages.map((image, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 hover:shadow-2xl transition group">
-                {/* 이미지 영역 */}
-                <div className="aspect-video relative overflow-hidden bg-gray-100">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {miteImages.map((imageUrl, index) => (
+              <div key={index} className="group cursor-pointer">
+                <div className="aspect-square relative overflow-hidden rounded-xl bg-gray-100 shadow-lg hover:shadow-2xl transition">
                   <img
-                    src={image.imageUrl}
-                    alt={image.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    src={imageUrl}
+                    alt={`진드기 관련 사진 ${index + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                </div>
-                {/* 설명 영역 */}
-                <div className="p-6">
-                  <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">
-                    {image.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {image.description}
-                  </p>
                 </div>
               </div>
             ))}
