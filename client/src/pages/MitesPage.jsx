@@ -1,14 +1,20 @@
 function MitesPage() {
   const miteImages = [
-    "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1615529182904-14819c35db37?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1631049552240-59c37f38802b?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?w=800&auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop&q=80"
+    "/images/mite1.png",
+    "/images/mite2.png",
+    "/images/mite3.png",
+    "/images/mite4.png",
+    "/images/mite5.png",
+    "/images/mite6.png",
+    "/images/mite7.png",
+    "/images/mite8.png",
+    "/images/mite9.png",
+    "/images/mite10.png",
+    "/images/mite11.png",
+    "/images/mite12.png",
+    "/images/mite13.png",
+    "/images/mite14.png",
+    "/images/mite15.png"
   ];
 
   return (
