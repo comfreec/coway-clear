@@ -322,10 +322,11 @@ function AdminPage() {
                 </div>
 
                 <div className="mt-4 space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">상태 변경</label>
                   <select
                     value={app.status}
                     onChange={(e) => updateStatus(app.id, e.target.value)}
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+                    className="w-full border-2 border-coway-blue rounded-lg px-4 py-3 text-base font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-coway-blue"
                   >
                     <option value="pending">대기중</option>
                     <option value="confirmed">확정</option>
@@ -337,16 +338,16 @@ function AdminPage() {
                     {app.status !== 'completed' && (
                       <button
                         onClick={() => updateStatus(app.id, 'completed')}
-                        className="flex-1 bg-green-500 text-white px-4 py-2 rounded text-sm font-semibold"
+                        className="flex-1 bg-green-500 text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-green-600 transition"
                       >
                         ✓ 완료 처리
                       </button>
                     )}
                     <button
                       onClick={() => deleteApplication(app.id, app.name)}
-                      className="flex-1 bg-red-500 text-white px-4 py-2 rounded text-sm font-semibold"
+                      className="flex-1 bg-red-500 text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-red-600 transition"
                     >
-                      삭제
+                      🗑️ 삭제
                     </button>
                   </div>
                 </div>
