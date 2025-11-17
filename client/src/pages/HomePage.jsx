@@ -45,7 +45,7 @@ function HomePage() {
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 px-2" style={{ lineHeight: '1.8' }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 px-2" style={{ lineHeight: '1.5' }}>
             <span className="text-yellow-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">5만원 상당</span><br />
             매트리스 케어를<br />
             <span className="bg-gradient-to-r from-yellow-300 to-green-300 bg-clip-text text-transparent">지금 100% 무료</span>로!
