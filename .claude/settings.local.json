@@ -46,7 +46,14 @@
       "Bash(start https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=freeclean-mattress)",
       "Bash(start https://console.firebase.google.com/project/freeclean-mattress/firestore)",
       "Bash(start notepad VERCEL_DEPLOY.md)",
-      "Bash(start https://free-clean-mattress.vercel.app)"
+      "Bash(start https://free-clean-mattress.vercel.app)",
+      "Bash(start https://vercel.com/comfreec/free-clean-mattress/settings/environment-variables)",
+      "Bash(cat:*)",
+      "Bash(start notepad serviceAccountKey.json)",
+      "Bash(start https://vercel.com/comfreec/free-clean-mattress/deployments)",
+      "WebFetch(domain:free-clean-mattress.vercel.app)",
+      "WebFetch(domain:unsplash.com)",
+      "WebFetch(domain:www.pexels.com)"
     ],
     "deny": [],
     "ask": []
