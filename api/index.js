@@ -292,10 +292,11 @@ export default async function handler(req, res) {
 
     // 9. 게시글 작성
     if (path === '/posts' && method === 'POST') {
-      const { title, content, author, password } = req.body;
+      const { title, content, author, password, rating } = req.body;
 
       const postData = {
         title, content, author, password,
+        rating: rating || 0,
         views: 0,
         created_at: admin.firestore.FieldValue.serverTimestamp()
       };

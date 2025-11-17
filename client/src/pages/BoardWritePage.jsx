@@ -10,6 +10,8 @@ function BoardWritePage() {
     author: '',
     password: ''
   });
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
@@ -22,10 +24,19 @@ function BoardWritePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (rating === 0) {
+      alert('별점을 선택해주세요.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('/api/posts', formData);
+      const response = await axios.post('/api/posts', {
+        ...formData,
+        rating
+      });
 
       if (response.data.success) {
         alert('게시글이 등록되었습니다.');
@@ -95,6 +106,40 @@ function BoardWritePage() {
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-coway-blue focus:border-transparent transition shadow-sm hover:border-gray-300"
                   placeholder="비밀번호를 입력하세요"
                 />
+              </div>
+            </div>
+
+            {/* 별점 선택 */}
+            <div>
+              <label className="block text-gray-800 font-bold mb-3 text-sm uppercase tracking-wide">
+                별점 <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center space-x-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    className="focus:outline-none transition-transform hover:scale-110"
+                  >
+                    <svg
+                      className="w-10 h-10 md:w-12 md:h-12"
+                      fill={(hoverRating || rating) >= star ? '#FCD34D' : '#E5E7EB'}
+                      stroke="#FCD34D"
+                      strokeWidth="1"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  </button>
+                ))}
+                {rating > 0 && (
+                  <span className="ml-3 text-lg font-bold text-gray-700">
+                    {rating}점
+                  </span>
+                )}
               </div>
             </div>
 

@@ -112,6 +112,15 @@ function BoardDetailPage() {
                 </svg>
                 <span className="font-medium">{post.author}</span>
               </span>
+              {post.rating > 0 && (
+                <>
+                  <span className="text-gray-300">|</span>
+                  <span className="inline-flex items-center space-x-1 text-yellow-500">
+                    <span className="text-base">{'⭐'.repeat(post.rating)}</span>
+                    <span className="text-gray-600 font-semibold">({post.rating}점)</span>
+                  </span>
+                </>
+              )}
               <span className="text-gray-300">|</span>
               <span className="inline-flex items-center space-x-2">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
