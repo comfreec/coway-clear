@@ -70,7 +70,7 @@ function ApplicationPage() {
             무료 매트리스 케어 신청
           </h1>
           <p className="text-lg text-gray-600">
-            간단한 정보를 입력하시면 전문 상담사가 연락드립니다
+            간단한 정보를 입력하시면 전문가가 연락드립니다
           </p>
         </div>
 
