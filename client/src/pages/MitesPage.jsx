@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 function MitesPage() {
   const miteImages = [
     "/images/mite1.png",
@@ -16,6 +18,11 @@ function MitesPage() {
     "/images/mite14.png",
     "/images/mite15.png"
   ];
+
+  // 페이지 로드 시 스크롤을 맨 위로
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="py-12 md:py-20 bg-gradient-to-br from-red-100 via-orange-50 to-yellow-100 min-h-screen">

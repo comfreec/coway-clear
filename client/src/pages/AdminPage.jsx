@@ -22,6 +22,7 @@ function AdminPage() {
 
   // 페이지 로드 시 인증 상태 확인
   useEffect(() => {
+    window.scrollTo(0, 0);
     const auth = sessionStorage.getItem('adminAuth');
     if (auth === 'authenticated') {
       setIsAuthenticated(true);

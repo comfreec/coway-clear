@@ -14,6 +14,7 @@ function BoardDetailPage() {
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchPost();
     fetchComments();
   }, [id]);
