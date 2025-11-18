@@ -7,14 +7,14 @@ async function sendTelegramNotification(applicationData) {
   const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
   const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-  console.log('텔레그램 환경변수 확인:', {
+  console.log('🔔 텔레그램 환경변수 확인:', {
     hasToken: !!TELEGRAM_BOT_TOKEN,
     hasChat: !!TELEGRAM_CHAT_ID,
     chatId: TELEGRAM_CHAT_ID
   });
 
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-    console.log('텔레그램 설정이 없습니다. 알림을 건너뜁니다.');
+    console.log('⚠️ 텔레그램 설정이 없습니다. 알림을 건너뜁니다.');
     return;
   }
 
@@ -30,52 +30,37 @@ async function sendTelegramNotification(applicationData) {
 💬 메시지: ${applicationData.message || '없음'}`;
 
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-  const payload = {
-    chat_id: TELEGRAM_CHAT_ID,
-    text: message
-  };
 
-  console.log('텔레그램 전송 시도:', url.substring(0, 50) + '...');
+  console.log('📤 텔레그램 전송 시작...');
 
   try {
-    const https = await import('https');
-    const data = JSON.stringify(payload);
-
-    const options = {
+    // Vercel의 fetch 사용 (global fetch)
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': data.length
-      }
-    };
-
-    return new Promise((resolve, reject) => {
-      const req = https.request(url, options, (res) => {
-        let body = '';
-        res.on('data', (chunk) => body += chunk);
-        res.on('end', () => {
-          console.log('텔레그램 응답:', body);
-          if (res.statusCode === 200) {
-            console.log('✅ 텔레그램 알림 전송 성공');
-            resolve(true);
-          } else {
-            console.error('❌ 텔레그램 알림 전송 실패:', body);
-            resolve(false);
-          }
-        });
-      });
-
-      req.on('error', (error) => {
-        console.error('❌ 텔레그램 요청 중 오류:', error);
-        reject(error);
-      });
-
-      req.write(data);
-      req.end();
+      },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      })
     });
+
+    const result = await response.json();
+
+    console.log('📥 텔레그램 응답:', JSON.stringify(result, null, 2));
+
+    if (response.ok && result.ok) {
+      console.log('✅ 텔레그램 알림 전송 성공!');
+      return true;
+    } else {
+      console.error('❌ 텔레그램 알림 전송 실패:', result);
+      return false;
+    }
   } catch (error) {
-    console.error('❌ 텔레그램 알림 전송 중 오류:', error);
-    throw error;
+    console.error('❌ 텔레그램 알림 전송 중 오류:', error.message);
+    console.error('에러 상세:', error);
+    return false;
   }
 }
 
@@ -185,10 +170,12 @@ export default async function handler(req, res) {
 
       const docRef = await db.collection('applications').add(applicationData);
 
-      // 텔레그램 알림 전송 (비동기로 처리하되 응답은 기다리지 않음)
-      sendTelegramNotification(applicationData).catch(err => {
-        console.error('텔레그램 알림 전송 중 오류:', err);
-      });
+      // 텔레그램 알림 전송 (await로 완료 대기)
+      try {
+        await sendTelegramNotification(applicationData);
+      } catch (err) {
+        console.error('⚠️ 텔레그램 알림 전송 중 오류 (무시):', err);
+      }
 
       return res.json({
         success: true,
