@@ -456,17 +456,12 @@ function AdminPage() {
                         defaultValue={app.preferred_date || ''}
                         className="w-full border-2 border-blue-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
-                      <select
+                      <input
+                        type="time"
                         id={`time-${app.id}`}
                         defaultValue={app.preferred_time || ''}
-                        className="w-full border-2 border-blue-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                      >
-                        <option value="">시간 선택</option>
-                        <option value="09:00-12:00">오전 (09:00-12:00)</option>
-                        <option value="12:00-15:00">오후 초반 (12:00-15:00)</option>
-                        <option value="15:00-18:00">오후 후반 (15:00-18:00)</option>
-                        <option value="18:00-21:00">저녁 (18:00-21:00)</option>
-                      </select>
+                        className="w-full border-2 border-blue-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
                       <button
                         onClick={() => {
                           const date = document.getElementById(`date-${app.id}`).value;
@@ -586,17 +581,12 @@ function AdminPage() {
                           defaultValue={app.preferred_date || ''}
                           className="w-full border border-blue-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
-                        <select
+                        <input
+                          type="time"
                           id={`desk-time-${app.id}`}
                           defaultValue={app.preferred_time || ''}
-                          className="w-full border border-blue-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
-                        >
-                          <option value="">시간 선택</option>
-                          <option value="09:00-12:00">오전 (09:00-12:00)</option>
-                          <option value="12:00-15:00">오후 초반 (12:00-15:00)</option>
-                          <option value="15:00-18:00">오후 후반 (15:00-18:00)</option>
-                          <option value="18:00-21:00">저녁 (18:00-21:00)</option>
-                        </select>
+                          className="w-full border border-blue-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
                         <button
                           onClick={() => {
                             const date = document.getElementById(`desk-date-${app.id}`).value;
