@@ -95,6 +95,7 @@ function AdminPage() {
           pendingApplications: allApps.filter(a => a.status === 'pending').length,
           confirmedApplications: allApps.filter(a => a.status === 'confirmed').length,
           completedApplications: allApps.filter(a => a.status === 'completed').length,
+          contactedApplications: allApps.filter(a => a.preferred_date && a.preferred_time).length,
           totalReviews: 0
         };
         setStats(calculatedStats);
@@ -320,11 +321,17 @@ function AdminPage() {
           <>
         {/* 통계 카드 */}
         {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6 mb-8">
             <div className="bg-white p-4 md:p-6 rounded-lg shadow">
               <div className="text-gray-500 text-xs md:text-sm mb-2">총 신청</div>
               <div className="text-2xl md:text-3xl font-bold text-coway-blue">
                 {stats.totalApplications}
+              </div>
+            </div>
+            <div className="bg-white p-4 md:p-6 rounded-lg shadow">
+              <div className="text-gray-500 text-xs md:text-sm mb-2">컨택완료</div>
+              <div className="text-2xl md:text-3xl font-bold text-green-600">
+                {stats.contactedApplications}
               </div>
             </div>
             <div className="bg-white p-4 md:p-6 rounded-lg shadow">
@@ -341,7 +348,7 @@ function AdminPage() {
             </div>
             <div className="bg-white p-4 md:p-6 rounded-lg shadow">
               <div className="text-gray-500 text-xs md:text-sm mb-2">완료</div>
-              <div className="text-2xl md:text-3xl font-bold text-green-600">
+              <div className="text-2xl md:text-3xl font-bold text-purple-600">
                 {stats.completedApplications}
               </div>
             </div>
@@ -425,7 +432,14 @@ function AdminPage() {
               <div key={app.id} className="border-b border-gray-200 p-4 hover:bg-gray-50">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <div className="font-bold text-lg text-gray-900">{app.name}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="font-bold text-lg text-gray-900">{app.name}</div>
+                      {app.preferred_date && app.preferred_time && (
+                        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                          ✓ 컨택완료
+                        </span>
+                      )}
+                    </div>
                     <div className="text-sm text-gray-500">{formatDate(app.created_at)}</div>
                   </div>
                   {getStatusBadge(app.status)}
@@ -560,7 +574,14 @@ function AdminPage() {
                       {formatDate(app.created_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {app.name}
+                      <div className="flex items-center gap-2">
+                        <span>{app.name}</span>
+                        {app.preferred_date && app.preferred_time && (
+                          <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-bold whitespace-nowrap">
+                            ✓ 컨택완료
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {app.phone}
