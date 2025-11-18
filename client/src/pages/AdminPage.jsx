@@ -433,13 +433,15 @@ function AdminPage() {
                 key={app.id}
                 className={`border-b border-gray-200 p-4 relative ${
                   app.status === 'completed'
-                    ? 'bg-gray-100 hover:bg-gray-200'
+                    ? 'bg-gray-50 hover:bg-gray-100'
                     : 'hover:bg-gray-50'
                 }`}
-                style={app.status === 'completed' ? {
-                  backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.1) 20px)'
-                } : {}}
               >
+                {app.status === 'completed' && (
+                  <div className="absolute inset-0 pointer-events-none" style={{
+                    background: 'linear-gradient(to top right, transparent 0%, transparent calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% + 2px), transparent calc(50% + 2px), transparent 100%)'
+                  }}></div>
+                )}
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <div className="flex items-center gap-2">
@@ -581,15 +583,17 @@ function AdminPage() {
                 {applications.map((app) => (
                   <tr
                     key={app.id}
-                    className={
+                    className={`relative ${
                       app.status === 'completed'
-                        ? 'bg-gray-100 hover:bg-gray-200'
+                        ? 'bg-gray-50 hover:bg-gray-100'
                         : 'hover:bg-gray-50'
-                    }
-                    style={app.status === 'completed' ? {
-                      backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.1) 20px)'
-                    } : {}}
+                    }`}
                   >
+                    {app.status === 'completed' && (
+                      <td className="absolute inset-0 pointer-events-none" colSpan="100" style={{
+                        background: 'linear-gradient(to top right, transparent 0%, transparent calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% + 2px), transparent calc(50% + 2px), transparent 100%)'
+                      }}></td>
+                    )}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(app.created_at)}
                     </td>
