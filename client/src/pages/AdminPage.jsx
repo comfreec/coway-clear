@@ -78,10 +78,12 @@ function AdminPage() {
           filteredApps = filteredApps.filter(app => app.status === filter);
         }
 
-        // 날짜 필터링 (연락 희망 날짜 기준)
+        // 날짜 필터링 (컨택 날짜 기준, 완료건 제외)
         if (searchDate) {
           filteredApps = filteredApps.filter(app => {
             if (!app.preferred_date) return false;
+            // 완료건은 제외
+            if (app.status === 'completed') return false;
             // preferred_date가 YYYY-MM-DD 형식이라고 가정
             return app.preferred_date === searchDate;
           });
@@ -404,7 +406,7 @@ function AdminPage() {
             {/* 날짜 검색 */}
             <div className="flex items-center space-x-2">
               <label className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-                📅 연락 희망 날짜:
+                📅 컨택날짜:
               </label>
               <input
                 type="date"
@@ -563,7 +565,7 @@ function AdminPage() {
                     매트리스 정보
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    연락 희망일시
+                    컨택일시
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     상태
