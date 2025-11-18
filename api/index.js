@@ -2,6 +2,56 @@ import admin from 'firebase-admin';
 
 let db = null;
 
+// 텔레그램 알림 전송 함수
+async function sendTelegramNotification(applicationData) {
+  const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+  const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.log('텔레그램 설정이 없습니다. 알림을 건너뜁니다.');
+    return;
+  }
+
+  const message = `
+🔔 새로운 매트리스 케어 신청!
+
+👤 이름: ${applicationData.name}
+📱 전화번호: ${applicationData.phone}
+📍 주소: ${applicationData.address} ${applicationData.detail_address || ''}
+🛏️ 매트리스 종류: ${applicationData.mattress_type || '미입력'}
+⏰ 사용 기간: ${applicationData.mattress_age || '미입력'}
+📅 희망 날짜: ${applicationData.preferred_date || '미입력'}
+🕐 희망 시간: ${applicationData.preferred_time || '미입력'}
+💬 메시지: ${applicationData.message || '없음'}
+  `.trim();
+
+  try {
+    const response = await fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      }
+    );
+
+    const result = await response.json();
+    if (result.ok) {
+      console.log('텔레그램 알림 전송 성공');
+    } else {
+      console.error('텔레그램 알림 전송 실패:', result);
+    }
+  } catch (error) {
+    console.error('텔레그램 알림 전송 중 오류:', error);
+  }
+}
+
 // Firebase 초기화 함수
 function initializeFirebase() {
   if (admin.apps.length > 0) {
@@ -107,6 +157,11 @@ export default async function handler(req, res) {
       };
 
       const docRef = await db.collection('applications').add(applicationData);
+
+      // 텔레그램 알림 전송 (비동기로 처리하되 응답은 기다리지 않음)
+      sendTelegramNotification(applicationData).catch(err => {
+        console.error('텔레그램 알림 전송 중 오류:', err);
+      });
 
       return res.json({
         success: true,
