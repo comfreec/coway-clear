@@ -362,10 +362,7 @@ function AdminPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex space-x-2">
               <button
-                onClick={() => {
-                  setFilter('all');
-                  setSearchDate('');
-                }}
+                onClick={() => setFilter('all')}
                 className={`px-4 py-2 rounded ${
                   filter === 'all'
                     ? 'bg-coway-blue text-white'
@@ -375,10 +372,7 @@ function AdminPage() {
                 전체
               </button>
               <button
-                onClick={() => {
-                  setFilter('pending');
-                  setSearchDate('');
-                }}
+                onClick={() => setFilter('pending')}
                 className={`px-4 py-2 rounded ${
                   filter === 'pending'
                     ? 'bg-coway-blue text-white'
@@ -388,10 +382,7 @@ function AdminPage() {
                 대기중
               </button>
               <button
-                onClick={() => {
-                  setFilter('confirmed');
-                  setSearchDate('');
-                }}
+                onClick={() => setFilter('confirmed')}
                 className={`px-4 py-2 rounded ${
                   filter === 'confirmed'
                     ? 'bg-coway-blue text-white'
@@ -401,10 +392,7 @@ function AdminPage() {
                 컨택완료
               </button>
               <button
-                onClick={() => {
-                  setFilter('completed');
-                  setSearchDate('');
-                }}
+                onClick={() => setFilter('completed')}
                 className={`px-4 py-2 rounded ${
                   filter === 'completed'
                     ? 'bg-coway-blue text-white'
