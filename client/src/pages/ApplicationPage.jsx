@@ -9,8 +9,6 @@ function ApplicationPage() {
     detail_address: '',
     mattress_type: '',
     mattress_age: '',
-    preferred_date: '',
-    preferred_time: '',
     message: ''
   });
 
@@ -55,8 +53,6 @@ function ApplicationPage() {
           detail_address: '',
           mattress_type: '',
           mattress_age: '',
-          preferred_date: '',
-          preferred_time: '',
           message: ''
         });
       }
@@ -216,40 +212,6 @@ function ApplicationPage() {
                   <option value="3-5">3-5년</option>
                   <option value="5-10">5-10년</option>
                   <option value="10+">10년 이상</option>
-                </select>
-              </div>
-            </div>
-
-            {/* 컨택 희망 날짜/시간 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-gray-800 font-bold mb-3 text-sm uppercase tracking-wide">
-                  연락 희망 날짜
-                </label>
-                <input
-                  type="date"
-                  name="preferred_date"
-                  value={formData.preferred_date}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-coway-blue focus:border-transparent transition shadow-sm hover:border-gray-300"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-800 font-bold mb-3 text-sm uppercase tracking-wide">
-                  연락 희망 시간
-                </label>
-                <select
-                  name="preferred_time"
-                  value={formData.preferred_time}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-coway-blue focus:border-transparent transition shadow-sm hover:border-gray-300 bg-white"
-                >
-                  <option value="">선택하세요</option>
-                  <option value="09:00-12:00">오전 (09:00-12:00)</option>
-                  <option value="12:00-15:00">오후 초반 (12:00-15:00)</option>
-                  <option value="15:00-18:00">오후 후반 (15:00-18:00)</option>
-                  <option value="18:00-21:00">저녁 (18:00-21:00)</option>
                 </select>
               </div>
             </div>

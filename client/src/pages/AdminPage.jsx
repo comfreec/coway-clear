@@ -130,6 +130,23 @@ function AdminPage() {
     }
   };
 
+  const updateDateTime = async (id, preferred_date, preferred_time) => {
+    try {
+      const response = await api.patch(`/api/applications/${id}`, {
+        preferred_date,
+        preferred_time
+      });
+
+      if (response.data.success) {
+        alert('약속 날짜/시간이 저장되었습니다.');
+        fetchData();
+      }
+    } catch (error) {
+      console.error('날짜/시간 업데이트 실패:', error);
+      alert('날짜/시간 업데이트 중 오류가 발생했습니다.');
+    }
+  };
+
   const deleteApplication = async (id, name) => {
     if (!confirm(`"${name}"님의 신청을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) {
       return;
@@ -426,17 +443,51 @@ function AdminPage() {
                   <div>
                     <span className="font-semibold">매트리스:</span> {app.mattress_type || '-'} ({app.mattress_age || '-'})
                   </div>
-                  {(app.preferred_date || app.preferred_time) && (
-                    <div className="bg-blue-50 p-2 rounded border border-blue-200">
-                      <span className="font-semibold text-blue-800">📅 연락 희망:</span>
-                      <div className="text-blue-700">
-                        {app.preferred_date || '-'} {app.preferred_time || ''}
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                <div className="mt-4 space-y-2">
+                <div className="mt-4 space-y-3">
+                  {/* 약속 날짜/시간 입력 */}
+                  <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                    <label className="block text-sm font-semibold text-blue-800 mb-2">📅 약속 날짜/시간 설정</label>
+                    <div className="space-y-2">
+                      <input
+                        type="date"
+                        id={`date-${app.id}`}
+                        defaultValue={app.preferred_date || ''}
+                        className="w-full border-2 border-blue-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <select
+                        id={`time-${app.id}`}
+                        defaultValue={app.preferred_time || ''}
+                        className="w-full border-2 border-blue-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                      >
+                        <option value="">시간 선택</option>
+                        <option value="09:00-12:00">오전 (09:00-12:00)</option>
+                        <option value="12:00-15:00">오후 초반 (12:00-15:00)</option>
+                        <option value="15:00-18:00">오후 후반 (15:00-18:00)</option>
+                        <option value="18:00-21:00">저녁 (18:00-21:00)</option>
+                      </select>
+                      <button
+                        onClick={() => {
+                          const date = document.getElementById(`date-${app.id}`).value;
+                          const time = document.getElementById(`time-${app.id}`).value;
+                          updateDateTime(app.id, date, time);
+                        }}
+                        className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition"
+                      >
+                        💾 약속 저장
+                      </button>
+                    </div>
+                    {(app.preferred_date || app.preferred_time) && (
+                      <div className="mt-2 pt-2 border-t border-blue-300">
+                        <span className="text-xs font-semibold text-blue-800">현재 약속:</span>
+                        <div className="text-sm text-blue-700 font-medium">
+                          {app.preferred_date || '-'} {app.preferred_time || ''}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <label className="block text-sm font-semibold text-gray-700 mb-1">상태 변경</label>
                   <select
                     value={app.status}
@@ -528,14 +579,43 @@ function AdminPage() {
                       <div className="text-xs text-gray-400">{app.mattress_age || '-'}</div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700">
-                      {app.preferred_date || app.preferred_time ? (
-                        <div className="bg-blue-50 p-2 rounded border border-blue-200">
-                          <div className="font-semibold text-blue-800">{app.preferred_date || '-'}</div>
-                          <div className="text-xs text-blue-600">{app.preferred_time || '-'}</div>
-                        </div>
-                      ) : (
-                        <span className="text-gray-400">미입력</span>
-                      )}
+                      <div className="space-y-2 min-w-[200px]">
+                        <input
+                          type="date"
+                          id={`desk-date-${app.id}`}
+                          defaultValue={app.preferred_date || ''}
+                          className="w-full border border-blue-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+                        <select
+                          id={`desk-time-${app.id}`}
+                          defaultValue={app.preferred_time || ''}
+                          className="w-full border border-blue-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                        >
+                          <option value="">시간 선택</option>
+                          <option value="09:00-12:00">오전 (09:00-12:00)</option>
+                          <option value="12:00-15:00">오후 초반 (12:00-15:00)</option>
+                          <option value="15:00-18:00">오후 후반 (15:00-18:00)</option>
+                          <option value="18:00-21:00">저녁 (18:00-21:00)</option>
+                        </select>
+                        <button
+                          onClick={() => {
+                            const date = document.getElementById(`desk-date-${app.id}`).value;
+                            const time = document.getElementById(`desk-time-${app.id}`).value;
+                            updateDateTime(app.id, date, time);
+                          }}
+                          className="w-full bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold hover:bg-blue-700 transition"
+                        >
+                          💾 저장
+                        </button>
+                        {(app.preferred_date || app.preferred_time) && (
+                          <div className="mt-1 pt-1 border-t border-blue-200">
+                            <span className="text-xs text-blue-600">현재:</span>
+                            <div className="text-xs text-blue-800 font-medium">
+                              {app.preferred_date || '-'} {app.preferred_time || ''}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getStatusBadge(app.status)}
