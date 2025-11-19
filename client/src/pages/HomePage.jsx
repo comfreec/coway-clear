@@ -375,7 +375,7 @@ function HomePage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">신뢰할 수 있는 전문 서비스</h2>
+            <h2 className="text-2xl md:text-4xl font-bold mb-4">신뢰할 수 있는 전문 서비스</h2>
             <p className="text-blue-200 text-lg">수많은 고객들이 선택한 이유</p>
           </div>
 
