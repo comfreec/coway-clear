@@ -749,7 +749,7 @@ function AdminPage() {
             {applications.map((app) => (
               <div
                 key={app.id}
-                className={`border-b border-gray-200 p-4 relative ${
+                className={`border-b-2 border-gray-800 p-4 relative ${
                   app.status === 'completed'
                     ? 'bg-gray-50 hover:bg-gray-100'
                     : 'hover:bg-gray-50'
@@ -949,7 +949,7 @@ function AdminPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y-2 divide-gray-800">
                 {applications.map((app) => (
                   <tr
                     key={app.id}
@@ -1137,7 +1137,7 @@ function AdminPage() {
                 </div>
               ) : (
                 posts.map((post) => (
-                  <div key={post.id} className="border-b border-gray-200 p-4 hover:bg-gray-50">
+                  <div key={post.id} className="border-b-2 border-gray-800 p-4 hover:bg-gray-50">
                     <div className="mb-3">
                       <h3 className="font-bold text-lg text-gray-900 mb-1">{post.title}</h3>
                       <div className="flex items-center space-x-3 text-sm text-gray-500">
@@ -1171,7 +1171,7 @@ function AdminPage() {
                     <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-24">삭제</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y-2 divide-gray-800">
                   {posts.length === 0 ? (
                     <tr>
                       <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
