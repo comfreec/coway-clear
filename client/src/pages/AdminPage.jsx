@@ -90,6 +90,12 @@ function AdminPage() {
             return app.preferred_date && app.preferred_time && app.status !== 'completed';
           });
         }
+        else if (filter === 'pending') {
+          // 대기중: 대기중 상태이면서 약속이 안 잡힌 항목
+          filteredApps = filteredApps.filter(app => {
+            return app.status === 'pending' && (!app.preferred_date || !app.preferred_time);
+          });
+        }
         else if (filter !== 'all') {
           filteredApps = filteredApps.filter(app => app.status === filter);
         }
@@ -99,7 +105,7 @@ function AdminPage() {
         // 전체 데이터로 통계 계산
         const calculatedStats = {
           totalApplications: allApps.length,
-          pendingApplications: allApps.filter(a => a.status === 'pending').length,
+          pendingApplications: allApps.filter(a => a.status === 'pending' && (!a.preferred_date || !a.preferred_time)).length,
           confirmedApplications: allApps.filter(a => a.preferred_date && a.preferred_time && a.status !== 'completed').length,
           completedApplications: allApps.filter(a => a.status === 'completed').length,
           contactedApplications: allApps.filter(a => a.preferred_date && a.preferred_time).length,
