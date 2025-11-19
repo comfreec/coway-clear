@@ -202,7 +202,12 @@ function AdminPage() {
     }
 
     try {
-      const response = await api.delete(`/api/applications/${id}`);
+      // 보관함 보기 중이면 archived_applications에서 삭제
+      const endpoint = viewArchived
+        ? `/api/archived-applications/${id}`
+        : `/api/applications/${id}`;
+
+      const response = await api.delete(endpoint);
 
       if (response.data.success) {
         alert('신청이 삭제되었습니다.');
@@ -229,6 +234,24 @@ function AdminPage() {
     } catch (error) {
       console.error('보관 실패:', error);
       alert('보관 중 오류가 발생했습니다.');
+    }
+  };
+
+  const restoreApplication = async (id, name) => {
+    if (!confirm(`"${name}"님의 신청을 일반 목록으로 복원하시겠습니까?`)) {
+      return;
+    }
+
+    try {
+      const response = await api.post(`/api/archived-applications/${id}/restore`);
+
+      if (response.data.success) {
+        alert('항목이 복원되었습니다.');
+        fetchData();
+      }
+    } catch (error) {
+      console.error('복원 실패:', error);
+      alert('복원 중 오류가 발생했습니다.');
     }
   };
 
@@ -672,12 +695,20 @@ function AdminPage() {
                   )}
 
                   {viewArchived && (
-                    <button
-                      onClick={() => deleteApplication(app.id, app.name)}
-                      className="w-full bg-red-500 text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-red-600 transition"
-                    >
-                      🗑️삭제
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => restoreApplication(app.id, app.name)}
+                        className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-blue-700 transition"
+                      >
+                        ↩️ 복원
+                      </button>
+                      <button
+                        onClick={() => deleteApplication(app.id, app.name)}
+                        className="flex-1 bg-red-500 text-white px-4 py-3 rounded-lg text-base font-bold hover:bg-red-600 transition"
+                      >
+                        🗑️ 삭제
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -861,16 +892,30 @@ function AdminPage() {
                       </td>
                     )}
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <button
-                        onClick={() => deleteApplication(app.id, app.name)}
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition font-semibold inline-flex items-center space-x-1"
-                        title="삭제"
-                      >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"/>
-                        </svg>
-                        <span>삭제</span>
-                      </button>
+                      <div className="flex gap-2 justify-center">
+                        {viewArchived && (
+                          <button
+                            onClick={() => restoreApplication(app.id, app.name)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold inline-flex items-center space-x-1"
+                            title="복원"
+                          >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/>
+                            </svg>
+                            <span>복원</span>
+                          </button>
+                        )}
+                        <button
+                          onClick={() => deleteApplication(app.id, app.name)}
+                          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition font-semibold inline-flex items-center space-x-1"
+                          title="삭제"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"/>
+                          </svg>
+                          <span>삭제</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -293,6 +293,54 @@ export default async function handler(req, res) {
       return res.json({ success: true, applications: archivedApps });
     }
 
+    // 3-4. 보관된 항목 복원
+    if (path.startsWith('/archived-applications/') && path.endsWith('/restore') && method === 'POST') {
+      const id = path.split('/')[2];
+
+      // 보관된 항목 가져오기
+      const archivedDoc = await db.collection('archived_applications').doc(id).get();
+
+      if (!archivedDoc.exists) {
+        return res.status(404).json({
+          success: false,
+          message: '보관된 항목을 찾을 수 없습니다.'
+        });
+      }
+
+      const data = archivedDoc.data();
+
+      // archived_at 필드 제거
+      const { archived_at, ...restoreData } = data;
+
+      const batch = db.batch();
+
+      // applications로 복사
+      const appRef = db.collection('applications').doc(id);
+      batch.set(appRef, restoreData);
+
+      // archived_applications에서 삭제
+      batch.delete(archivedDoc.ref);
+
+      await batch.commit();
+
+      return res.json({
+        success: true,
+        message: '항목이 복원되었습니다.'
+      });
+    }
+
+    // 3-5. 보관된 항목 삭제
+    if (path.startsWith('/archived-applications/') && method === 'DELETE') {
+      const id = path.split('/')[2];
+
+      await db.collection('archived_applications').doc(id).delete();
+
+      return res.json({
+        success: true,
+        message: '보관 항목이 삭제되었습니다.'
+      });
+    }
+
     // 4. 제품 목록 조회
     if (path === '/products' && method === 'GET') {
       const snapshot = await db.collection('products').get();
