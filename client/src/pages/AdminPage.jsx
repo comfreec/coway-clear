@@ -84,6 +84,12 @@ function AdminPage() {
           });
         }
         // 날짜 검색이 없을 때만 상태 필터링 적용
+        else if (filter === 'confirmed') {
+          // 컨택완료: 약속 날짜/시간이 있는 항목 (완료건 제외)
+          filteredApps = filteredApps.filter(app => {
+            return app.preferred_date && app.preferred_time && app.status !== 'completed';
+          });
+        }
         else if (filter !== 'all') {
           filteredApps = filteredApps.filter(app => app.status === filter);
         }
@@ -94,7 +100,7 @@ function AdminPage() {
         const calculatedStats = {
           totalApplications: allApps.length,
           pendingApplications: allApps.filter(a => a.status === 'pending').length,
-          confirmedApplications: allApps.filter(a => a.status === 'confirmed').length,
+          confirmedApplications: allApps.filter(a => a.preferred_date && a.preferred_time && a.status !== 'completed').length,
           completedApplications: allApps.filter(a => a.status === 'completed').length,
           contactedApplications: allApps.filter(a => a.preferred_date && a.preferred_time).length,
           totalReviews: 0
