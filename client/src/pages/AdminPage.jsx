@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { db } from '../firebase';
+import { db, isFirebaseConfigured } from '../firebase';
 import { collection, onSnapshot, query, doc, setDoc, deleteDoc, serverTimestamp, where, orderBy } from 'firebase/firestore';
 
 // Axios 인스턴스 생성 - Vercel 배포 환경에서도 작동하도록
@@ -38,86 +38,102 @@ function AdminPage() {
     }
   }, []);
 
-  // 실시간 데이터 동기화
+  // 실시간 데이터 동기화 (Firebase 설정 시) 또는 API 폴링
   useEffect(() => {
     if (!isAuthenticated || activeTab !== 'applications' || viewArchived) {
       return;
     }
 
-    setLoading(true);
+    // Firebase 실시간 동기화 사용 가능한 경우
+    if (isFirebaseConfigured && db) {
+      setLoading(true);
 
-    // applications 컬렉션 실시간 리스너
-    const applicationsQuery = query(
-      collection(db, 'applications'),
-      orderBy('created_at', 'desc')
-    );
-
-    const unsubscribe = onSnapshot(applicationsQuery, (snapshot) => {
       try {
-        const allApps = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          created_at: doc.data().created_at?.toDate().toISOString()
-        }));
+        // applications 컬렉션 실시간 리스너
+        const applicationsQuery = query(
+          collection(db, 'applications'),
+          orderBy('created_at', 'desc')
+        );
 
-        // 클라이언트 측에서 필터링
-        let filteredApps = allApps;
+        const unsubscribe = onSnapshot(applicationsQuery, (snapshot) => {
+          try {
+            const allApps = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+              created_at: doc.data().created_at?.toDate().toISOString()
+            }));
 
-        // 날짜 검색
-        if (searchDate) {
-          filteredApps = filteredApps.filter(app => {
-            if (!app.preferred_date) return false;
-            if (app.status === 'completed') return false;
-            return app.preferred_date === searchDate;
-          });
-        }
-        // 상태 필터링
-        else if (filter === 'confirmed') {
-          filteredApps = filteredApps.filter(app => {
-            return app.preferred_date && app.preferred_time && app.status !== 'completed';
-          });
-        }
-        else if (filter === 'pending') {
-          filteredApps = filteredApps.filter(app => {
-            return app.status === 'pending' && (!app.preferred_date || !app.preferred_time);
-          });
-        }
-        else if (filter !== 'all') {
-          filteredApps = filteredApps.filter(app => app.status === filter);
-        }
-
-        // 정렬: 완료건은 뒤로, 나머지는 최신순
-        filteredApps.sort((a, b) => {
-          if (a.status === 'completed' && b.status !== 'completed') return 1;
-          if (a.status !== 'completed' && b.status === 'completed') return -1;
-          return new Date(b.created_at) - new Date(a.created_at);
+            processAndSetApplications(allApps);
+            setLoading(false);
+          } catch (error) {
+            console.error('데이터 처리 실패:', error);
+            setLoading(false);
+          }
+        }, (error) => {
+          console.error('실시간 리스너 오류:', error);
+          // 실시간 동기화 실패 시 API로 폴백
+          fetchData();
         });
 
-        setApplications(filteredApps);
-
-        // 통계 계산
-        const calculatedStats = {
-          totalApplications: allApps.length,
-          pendingApplications: allApps.filter(a => a.status === 'pending' && (!a.preferred_date || !a.preferred_time)).length,
-          confirmedApplications: allApps.filter(a => a.preferred_date && a.preferred_time && a.status !== 'completed').length,
-          completedApplications: allApps.filter(a => a.status === 'completed').length,
-          contactedApplications: allApps.filter(a => a.preferred_date && a.preferred_time).length,
-          totalReviews: 0
-        };
-        setStats(calculatedStats);
-        setLoading(false);
+        return () => unsubscribe();
       } catch (error) {
-        console.error('데이터 처리 실패:', error);
-        setLoading(false);
+        console.error('Firebase 리스너 설정 실패:', error);
+        fetchData();
       }
-    }, (error) => {
-      console.error('실시간 리스너 오류:', error);
-      alert('데이터 동기화 중 오류가 발생했습니다.');
-      setLoading(false);
+    } else {
+      // Firebase 미설정 시 API 사용
+      fetchData();
+    }
+  }, [isAuthenticated, activeTab, viewArchived, filter, searchDate]);
+
+  // 데이터 처리 공통 함수
+  const processAndSetApplications = (allApps) => {
+    // 클라이언트 측에서 필터링
+    let filteredApps = allApps;
+
+    // 날짜 검색
+    if (searchDate) {
+      filteredApps = filteredApps.filter(app => {
+        if (!app.preferred_date) return false;
+        if (app.status === 'completed') return false;
+        return app.preferred_date === searchDate;
+      });
+    }
+    // 상태 필터링
+    else if (filter === 'confirmed') {
+      filteredApps = filteredApps.filter(app => {
+        return app.preferred_date && app.preferred_time && app.status !== 'completed';
+      });
+    }
+    else if (filter === 'pending') {
+      filteredApps = filteredApps.filter(app => {
+        return app.status === 'pending' && (!app.preferred_date || !app.preferred_time);
+      });
+    }
+    else if (filter !== 'all') {
+      filteredApps = filteredApps.filter(app => app.status === filter);
+    }
+
+    // 정렬: 완료건은 뒤로, 나머지는 최신순
+    filteredApps.sort((a, b) => {
+      if (a.status === 'completed' && b.status !== 'completed') return 1;
+      if (a.status !== 'completed' && b.status === 'completed') return -1;
+      return new Date(b.created_at) - new Date(a.created_at);
     });
 
-    return () => unsubscribe();
-  }, [isAuthenticated, activeTab, viewArchived, filter, searchDate]);
+    setApplications(filteredApps);
+
+    // 통계 계산
+    const calculatedStats = {
+      totalApplications: allApps.length,
+      pendingApplications: allApps.filter(a => a.status === 'pending' && (!a.preferred_date || !a.preferred_time)).length,
+      confirmedApplications: allApps.filter(a => a.preferred_date && a.preferred_time && a.status !== 'completed').length,
+      completedApplications: allApps.filter(a => a.status === 'completed').length,
+      contactedApplications: allApps.filter(a => a.preferred_date && a.preferred_time).length,
+      totalReviews: 0
+    };
+    setStats(calculatedStats);
+  };
 
   // 보관함 또는 후기 탭 데이터 로드
   useEffect(() => {
@@ -200,46 +216,50 @@ function AdminPage() {
     }
   };
 
-  // 접속 중인 관리자 실시간 감시
+  // 접속 중인 관리자 실시간 감시 (Firebase 설정 시에만)
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !isFirebaseConfigured || !db) return;
 
     // 세션 생성
     createAdminSession();
 
     // 접속자 실시간 리스너
-    const sessionsQuery = query(collection(db, 'admin_sessions'));
-    const unsubscribeSessions = onSnapshot(sessionsQuery, (snapshot) => {
-      const sessions = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        loginTime: doc.data().loginTime?.toDate(),
-        lastActive: doc.data().lastActive?.toDate()
-      }));
-      setActiveSessions(sessions);
-    });
+    try {
+      const sessionsQuery = query(collection(db, 'admin_sessions'));
+      const unsubscribeSessions = onSnapshot(sessionsQuery, (snapshot) => {
+        const sessions = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          loginTime: doc.data().loginTime?.toDate(),
+          lastActive: doc.data().lastActive?.toDate()
+        }));
+        setActiveSessions(sessions);
+      });
 
-    // 페이지 닫을 때 세션 삭제
-    const handleBeforeUnload = () => {
-      if (sessionIdRef.current) {
-        // Beacon API로 비동기 전송
-        navigator.sendBeacon(`/api/delete-session/${sessionIdRef.current}`);
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
+      // 페이지 닫을 때 세션 삭제
+      const handleBeforeUnload = () => {
+        if (sessionIdRef.current) {
+          // Beacon API로 비동기 전송
+          navigator.sendBeacon(`/api/delete-session/${sessionIdRef.current}`);
+        }
+      };
+      window.addEventListener('beforeunload', handleBeforeUnload);
 
-    return () => {
-      unsubscribeSessions();
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      if (sessionIdRef.current) {
-        deleteDoc(doc(db, 'admin_sessions', sessionIdRef.current)).catch(err =>
-          console.error('세션 삭제 실패:', err)
-        );
-      }
-      if (heartbeatIntervalRef.current) {
-        clearInterval(heartbeatIntervalRef.current);
-      }
-    };
+      return () => {
+        unsubscribeSessions();
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+        if (sessionIdRef.current) {
+          deleteDoc(doc(db, 'admin_sessions', sessionIdRef.current)).catch(err =>
+            console.error('세션 삭제 실패:', err)
+          );
+        }
+        if (heartbeatIntervalRef.current) {
+          clearInterval(heartbeatIntervalRef.current);
+        }
+      };
+    } catch (error) {
+      console.error('세션 관리 설정 실패:', error);
+    }
   }, [isAuthenticated]);
 
   const fetchArchivedData = async () => {
@@ -274,59 +294,7 @@ function AdminPage() {
 
       if (response.data.success) {
         const allApps = response.data.applications;
-
-        // 클라이언트 측에서 필터링 (상태 또는 날짜)
-        let filteredApps = allApps;
-
-        // 날짜 검색이 우선 (날짜가 선택되어 있으면 날짜로만 필터링)
-        if (searchDate) {
-          filteredApps = filteredApps.filter(app => {
-            if (!app.preferred_date) return false;
-            // 완료건은 제외
-            if (app.status === 'completed') return false;
-            // preferred_date가 YYYY-MM-DD 형식이라고 가정
-            return app.preferred_date === searchDate;
-          });
-        }
-        // 날짜 검색이 없을 때만 상태 필터링 적용
-        else if (filter === 'confirmed') {
-          // 컨택완료: 약속 날짜/시간이 있는 항목 (완료건 제외)
-          filteredApps = filteredApps.filter(app => {
-            return app.preferred_date && app.preferred_time && app.status !== 'completed';
-          });
-        }
-        else if (filter === 'pending') {
-          // 대기중: 대기중 상태이면서 약속이 안 잡힌 항목
-          filteredApps = filteredApps.filter(app => {
-            return app.status === 'pending' && (!app.preferred_date || !app.preferred_time);
-          });
-        }
-        else if (filter !== 'all') {
-          filteredApps = filteredApps.filter(app => app.status === filter);
-        }
-
-        // 정렬: 완료건은 뒤로, 나머지는 최신순
-        filteredApps.sort((a, b) => {
-          // 완료 상태는 뒤로
-          if (a.status === 'completed' && b.status !== 'completed') return 1;
-          if (a.status !== 'completed' && b.status === 'completed') return -1;
-
-          // 같은 상태 그룹 내에서는 최신순
-          return new Date(b.created_at) - new Date(a.created_at);
-        });
-
-        setApplications(filteredApps);
-
-        // 전체 데이터로 통계 계산
-        const calculatedStats = {
-          totalApplications: allApps.length,
-          pendingApplications: allApps.filter(a => a.status === 'pending' && (!a.preferred_date || !a.preferred_time)).length,
-          confirmedApplications: allApps.filter(a => a.preferred_date && a.preferred_time && a.status !== 'completed').length,
-          completedApplications: allApps.filter(a => a.status === 'completed').length,
-          contactedApplications: allApps.filter(a => a.preferred_date && a.preferred_time).length,
-          totalReviews: 0
-        };
-        setStats(calculatedStats);
+        processAndSetApplications(allApps);
       }
     } catch (error) {
       console.error('데이터 로딩 실패:', error);
