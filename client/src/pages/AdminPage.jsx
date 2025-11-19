@@ -166,12 +166,18 @@ function AdminPage() {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      // 취소를 선택하면 대기중으로 변경
-      const actualStatus = newStatus === 'cancelled' ? 'pending' : newStatus;
+      // 취소를 선택하면 대기중으로 변경하고 약속 날짜/시간도 제거
+      const updateData = {};
 
-      const response = await api.patch(`/api/applications/${id}`, {
-        status: actualStatus
-      });
+      if (newStatus === 'cancelled') {
+        updateData.status = 'pending';
+        updateData.preferred_date = '';
+        updateData.preferred_time = '';
+      } else {
+        updateData.status = newStatus;
+      }
+
+      const response = await api.patch(`/api/applications/${id}`, updateData);
 
       if (response.data.success) {
         fetchData();
