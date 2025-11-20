@@ -1413,7 +1413,7 @@ function AdminPage() {
                 <div className="grid grid-cols-7 gap-1">
                   {/* 요일 헤더 */}
                   {['일', '월', '화', '수', '목', '금', '토'].map(day => (
-                    <div key={day} className={`text-center py-2 font-bold text-sm ${day === '일' ? 'text-red-500' : day === '토' ? 'text-blue-500' : 'text-gray-700'}`}>
+                    <div key={day} className={`text-center py-2 font-bold text-xs md:text-sm ${day === '일' ? 'text-red-500' : day === '토' ? 'text-blue-500' : 'text-gray-700'}`}>
                       {day}
                     </div>
                   ))}
@@ -1428,7 +1428,7 @@ function AdminPage() {
 
                     // 빈 셀
                     for (let i = 0; i < firstDay; i++) {
-                      cells.push(<div key={`empty-${i}`} className="h-20"></div>);
+                      cells.push(<div key={`empty-${i}`} className="h-10 md:h-20"></div>);
                     }
 
                     // 날짜 셀
@@ -1439,23 +1439,67 @@ function AdminPage() {
                       );
 
                       cells.push(
-                        <div key={day} className={`h-20 border rounded p-1 text-xs overflow-hidden ${appointments.length > 0 ? 'bg-blue-50 border-blue-300' : 'bg-gray-50'}`}>
-                          <div className={`font-bold mb-1 ${new Date(year, month, day).getDay() === 0 ? 'text-red-500' : new Date(year, month, day).getDay() === 6 ? 'text-blue-500' : ''}`}>
+                        <div key={day} className={`h-10 md:h-20 border rounded p-1 text-xs overflow-hidden ${appointments.length > 0 ? 'bg-blue-50 border-blue-300' : 'bg-gray-50'}`}>
+                          <div className={`font-bold text-xs md:text-sm ${new Date(year, month, day).getDay() === 0 ? 'text-red-500' : new Date(year, month, day).getDay() === 6 ? 'text-blue-500' : ''}`}>
                             {day}
                           </div>
-                          {appointments.slice(0, 2).map((app, idx) => (
-                            <div key={idx} className="bg-blue-500 text-white rounded px-1 mb-0.5 truncate">
-                              {app.preferred_time} {app.name}
+                          {/* 모바일: 숫자만 표시 */}
+                          {appointments.length > 0 && (
+                            <div className="block md:hidden text-center">
+                              <span className="bg-blue-500 text-white text-xs px-1 rounded">{appointments.length}</span>
                             </div>
-                          ))}
-                          {appointments.length > 2 && (
-                            <div className="text-blue-600 font-bold">+{appointments.length - 2}건</div>
                           )}
+                          {/* 데스크톱: 상세 표시 */}
+                          <div className="hidden md:block">
+                            {appointments.slice(0, 2).map((app, idx) => (
+                              <div key={idx} className="bg-blue-500 text-white rounded px-1 mb-0.5 truncate">
+                                {app.preferred_time} {app.name}
+                              </div>
+                            ))}
+                            {appointments.length > 2 && (
+                              <div className="text-blue-600 font-bold">+{appointments.length - 2}건</div>
+                            )}
+                          </div>
                         </div>
                       );
                     }
 
                     return cells;
+                  })()}
+                </div>
+
+                {/* 모바일용 일정 목록 */}
+                <div className="block md:hidden mt-4 border-t pt-4">
+                  <h3 className="font-bold text-lg mb-3">📋 이번 달 일정</h3>
+                  {(() => {
+                    const year = selectedMonth.getFullYear();
+                    const month = selectedMonth.getMonth();
+                    const monthApps = allApplicationsData
+                      .filter(app => {
+                        if (!app.preferred_date || app.status === 'completed') return false;
+                        const appDate = new Date(app.preferred_date);
+                        return appDate.getFullYear() === year && appDate.getMonth() === month;
+                      })
+                      .sort((a, b) => {
+                        if (a.preferred_date !== b.preferred_date) {
+                          return a.preferred_date.localeCompare(b.preferred_date);
+                        }
+                        return (a.preferred_time || '').localeCompare(b.preferred_time || '');
+                      });
+
+                    if (monthApps.length === 0) {
+                      return <div className="text-gray-500 text-center py-4">예정된 일정이 없습니다</div>;
+                    }
+
+                    return monthApps.map((app, idx) => (
+                      <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
+                        <div className="font-bold text-blue-800">
+                          {app.preferred_date} {app.preferred_time}
+                        </div>
+                        <div className="text-gray-800">{app.name} - {app.phone}</div>
+                        <div className="text-gray-600 text-sm truncate">{app.address}</div>
+                      </div>
+                    ));
                   })()}
                 </div>
 
