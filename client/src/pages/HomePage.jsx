@@ -66,28 +66,44 @@ function HomePage() {
           </div>
 
           {customPrefix && (
-            <div
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 px-2"
-              style={{
-                animation: 'slideInFromLeft 1s ease-out forwards'
-              }}
-            >
-              <span className="text-white" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.3)' }}>
-                {customPrefix}
-              </span>
+            <div className="overflow-hidden mb-6 md:mb-8 px-2">
+              <div
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold"
+                style={{
+                  animation: 'marqueeSlide 8s linear infinite'
+                }}
+              >
+                <span className="text-white" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.3)' }}>
+                  {customPrefix}
+                </span>
+              </div>
             </div>
           )}
 
-          {/* 슬라이드 애니메이션 CSS */}
+          {/* 마키 슬라이드 애니메이션 CSS */}
           <style>{`
-            @keyframes slideInFromLeft {
+            @keyframes marqueeSlide {
               0% {
                 opacity: 0;
-                transform: translateX(-100px);
+                transform: translateX(-100%);
               }
-              100% {
+              10% {
+                opacity: 1;
+              }
+              45% {
                 opacity: 1;
                 transform: translateX(0);
+              }
+              55% {
+                opacity: 1;
+                transform: translateX(0);
+              }
+              90% {
+                opacity: 1;
+              }
+              100% {
+                opacity: 0;
+                transform: translateX(100%);
               }
             }
           `}</style>
