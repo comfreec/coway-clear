@@ -1607,6 +1607,11 @@ function AdminPage() {
                         <div className={`text-sm truncate ${app.status === 'completed' ? 'text-gray-400 line-through decoration-red-500 decoration-2' : 'text-gray-600'}`}>
                           {app.address}
                         </div>
+                        {app.memo && (
+                          <div className={`text-sm mt-1 px-2 py-1 rounded ${app.status === 'completed' ? 'bg-gray-200 text-gray-500' : 'bg-yellow-100 text-yellow-800'}`}>
+                            📝 {app.memo}
+                          </div>
+                        )}
                         {app.status === 'completed' ? (
                           <div className="mt-2 flex gap-2">
                             <div className="flex-1 text-center text-red-500 font-bold text-sm py-2">
