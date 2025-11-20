@@ -842,10 +842,7 @@ function AdminPage() {
                         <div className="mt-3 pt-3 border-t-2 border-green-400 bg-green-100 -mx-3 px-3 pb-2 rounded-b-lg">
                           <div className="text-xs font-bold text-green-700 mb-1">📅 확정된 약속</div>
                           <div className="text-xl font-bold text-green-800">
-                            {app.preferred_date || '-'}
-                          </div>
-                          <div className="text-lg font-bold text-green-700">
-                            {app.preferred_time || ''}
+                            {app.preferred_date || '-'} {app.preferred_time || ''}
                           </div>
                         </div>
                       )}
@@ -1033,11 +1030,8 @@ function AdminPage() {
                           {(app.preferred_date || app.preferred_time) && (
                             <div className="mt-2 pt-2 border-t-2 border-green-400 bg-green-100 -mx-2 px-2 pb-2 rounded-b">
                               <div className="text-xs font-bold text-green-700 mb-1">📅 확정 약속</div>
-                              <div className="text-base font-bold text-green-800">
-                                {app.preferred_date || '-'}
-                              </div>
-                              <div className="text-base font-bold text-green-700">
-                                {app.preferred_time || ''}
+                              <div className="text-sm font-bold text-green-800">
+                                {app.preferred_date || '-'} {app.preferred_time || ''}
                               </div>
                             </div>
                           )}
