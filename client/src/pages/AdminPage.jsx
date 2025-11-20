@@ -32,6 +32,8 @@ function AdminPage() {
   const [showCalendar, setShowCalendar] = useState(false); // 캘린더 모달
   const [selectedMonth, setSelectedMonth] = useState(new Date()); // 선택된 월
   const [selectedDate, setSelectedDate] = useState(null); // 선택된 날짜
+  const [customPrefix, setCustomPrefix] = useState(''); // 홈페이지 커스텀 문구
+  const [customPrefixInput, setCustomPrefixInput] = useState(''); // 입력값
   const sessionIdRef = useRef(null);
   const heartbeatIntervalRef = useRef(null);
   const prevCountRef = useRef(0); // 이전 신청 수 (알림음용)
@@ -120,6 +122,63 @@ function AdminPage() {
     setSearchInput('');
     setSearchQuery('');
   };
+
+  // 설정 불러오기
+  const fetchSettings = async () => {
+    try {
+      const response = await api.get('/api/settings');
+      if (response.data.success) {
+        const prefix = response.data.settings.customPrefix || '';
+        setCustomPrefix(prefix);
+        setCustomPrefixInput(prefix);
+      }
+    } catch (error) {
+      console.error('설정 로딩 실패:', error);
+    }
+  };
+
+  // 설정 저장
+  const saveSettings = async () => {
+    try {
+      const response = await api.patch('/api/settings', {
+        customPrefix: customPrefixInput
+      });
+      if (response.data.success) {
+        setCustomPrefix(customPrefixInput);
+        alert('설정이 저장되었습니다.');
+      }
+    } catch (error) {
+      console.error('설정 저장 실패:', error);
+      alert('설정 저장 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 설정 초기화
+  const resetSettings = async () => {
+    if (!confirm('홈페이지 문구를 기본값으로 초기화하시겠습니까?')) {
+      return;
+    }
+    setCustomPrefixInput('');
+    try {
+      const response = await api.patch('/api/settings', {
+        customPrefix: ''
+      });
+      if (response.data.success) {
+        setCustomPrefix('');
+        alert('설정이 초기화되었습니다.');
+      }
+    } catch (error) {
+      console.error('설정 초기화 실패:', error);
+      alert('설정 초기화 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 설정 탭 진입 시 설정 불러오기
+  useEffect(() => {
+    if (isAuthenticated && activeTab === 'settings') {
+      fetchSettings();
+    }
+  }, [isAuthenticated, activeTab]);
 
   // 데이터 처리 공통 함수
   const processAndSetApplications = (allApps) => {
@@ -704,6 +763,16 @@ function AdminPage() {
               }`}
             >
               ⭐ 후기 관리
+            </button>
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`px-6 py-3 rounded-lg font-semibold transition ${
+                activeTab === 'settings'
+                  ? 'bg-coway-blue text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              ⚙️ 환경설정
             </button>
           </div>
         </div>
@@ -1645,6 +1714,68 @@ function AdminPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* 환경설정 탭 */}
+        {activeTab === 'settings' && (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-blue-50 border-b">
+              <h2 className="text-xl font-bold text-gray-900">⚙️ 환경설정</h2>
+              <p className="text-sm text-gray-600 mt-1">홈페이지 표시 문구를 설정합니다</p>
+            </div>
+
+            <div className="p-6">
+              <div className="mb-6">
+                <label className="block text-lg font-bold text-gray-800 mb-3">
+                  홈페이지 커스텀 문구
+                </label>
+                <p className="text-sm text-gray-600 mb-4">
+                  아파트 이름 등을 입력하면 홈페이지 메인 문구 위에 표시됩니다.<br/>
+                  예: "화명롯데캐슬카이저 입주민을 위한"
+                </p>
+
+                <textarea
+                  value={customPrefixInput}
+                  onChange={(e) => setCustomPrefixInput(e.target.value)}
+                  placeholder="예: 화명롯데캐슬카이저 입주민을 위한"
+                  rows="3"
+                  className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-coway-blue"
+                />
+
+                <div className="flex gap-3 mt-4">
+                  <button
+                    onClick={saveSettings}
+                    className="bg-coway-blue text-white px-6 py-3 rounded-lg font-semibold hover:bg-coway-navy transition"
+                  >
+                    💾 저장
+                  </button>
+                  <button
+                    onClick={resetSettings}
+                    className="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition"
+                  >
+                    🔄 초기화
+                  </button>
+                </div>
+              </div>
+
+              {/* 미리보기 */}
+              <div className="mt-8 border-t pt-6">
+                <h3 className="text-lg font-bold text-gray-800 mb-4">📱 미리보기</h3>
+                <div className="bg-gray-900 text-white p-6 rounded-lg text-center">
+                  {customPrefixInput && (
+                    <div className="text-yellow-400 text-lg md:text-xl font-bold mb-2">
+                      {customPrefixInput}
+                    </div>
+                  )}
+                  <div className="text-2xl md:text-3xl font-bold">
+                    5만원 상당<br/>
+                    매트리스 케어를<br/>
+                    지금 100% 무료로!
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

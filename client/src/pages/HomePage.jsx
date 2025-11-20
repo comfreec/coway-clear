@@ -1,12 +1,27 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
+  const [customPrefix, setCustomPrefix] = useState('');
 
-  // 페이지 로드 시 스크롤을 맨 위로
+  // 페이지 로드 시 스크롤을 맨 위로 + 설정 불러오기
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // 설정 불러오기
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.get('/api/settings');
+        if (response.data.success && response.data.settings.customPrefix) {
+          setCustomPrefix(response.data.settings.customPrefix);
+        }
+      } catch (error) {
+        console.error('설정 로딩 실패:', error);
+      }
+    };
+    fetchSettings();
   }, []);
 
   const faqs = [
@@ -50,6 +65,11 @@ function HomePage() {
             </div>
           </div>
 
+          {customPrefix && (
+            <div className="text-yellow-400 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3 px-2">
+              {customPrefix}
+            </div>
+          )}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 px-2" style={{ lineHeight: '1.5' }}>
             <span className="text-yellow-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">5만원 상당</span><br />
             매트리스 케어를<br />

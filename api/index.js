@@ -549,6 +549,40 @@ export default async function handler(req, res) {
       });
     }
 
+    // 13. 설정 조회
+    if (path === '/settings' && method === 'GET') {
+      const settingsDoc = await db.collection('settings').doc('site').get();
+
+      if (!settingsDoc.exists) {
+        return res.json({
+          success: true,
+          settings: {
+            customPrefix: ''
+          }
+        });
+      }
+
+      return res.json({
+        success: true,
+        settings: settingsDoc.data()
+      });
+    }
+
+    // 14. 설정 저장
+    if (path === '/settings' && method === 'PATCH') {
+      const { customPrefix } = req.body;
+
+      await db.collection('settings').doc('site').set({
+        customPrefix: customPrefix || '',
+        updated_at: admin.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+
+      return res.json({
+        success: true,
+        message: '설정이 저장되었습니다.'
+      });
+    }
+
     // 매칭되는 라우트가 없음
     return res.status(404).json({
       success: false,
