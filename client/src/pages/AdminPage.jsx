@@ -1013,7 +1013,10 @@ function AdminPage() {
 
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="font-semibold">연락처:</span> {app.phone}
+                    <span className="font-semibold">연락처:</span>{' '}
+                    <a href={`tel:${app.phone}`} className="text-blue-600 underline">
+                      {app.phone}
+                    </a>
                   </div>
                   <div>
                     <span className="font-semibold">주소:</span><br/>
@@ -1246,8 +1249,10 @@ function AdminPage() {
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {app.phone}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <a href={`tel:${app.phone}`} className="text-blue-600 underline">
+                        {app.phone}
+                      </a>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {app.address}
@@ -1602,7 +1607,10 @@ function AdminPage() {
                           {app.preferred_date} &nbsp;&nbsp; {app.preferred_time}
                         </div>
                         <div className={`${app.status === 'completed' ? 'text-gray-500 line-through decoration-red-500 decoration-2' : 'text-gray-800'}`}>
-                          {app.name} - {app.phone}
+                          {app.name} -{' '}
+                          <a href={`tel:${app.phone}`} className="text-blue-600 underline">
+                            {app.phone}
+                          </a>
                         </div>
                         <div className={`text-sm truncate ${app.status === 'completed' ? 'text-gray-400 line-through decoration-red-500 decoration-2' : 'text-gray-600'}`}>
                           {app.address}
