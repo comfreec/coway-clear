@@ -1608,8 +1608,20 @@ function AdminPage() {
                           {app.address}
                         </div>
                         {app.status === 'completed' ? (
-                          <div className="mt-2 text-center text-red-500 font-bold text-sm">
-                            ✓ 완료됨
+                          <div className="mt-2 flex gap-2">
+                            <div className="flex-1 text-center text-red-500 font-bold text-sm py-2">
+                              ✓ 완료됨
+                            </div>
+                            <button
+                              onClick={() => {
+                                if (confirm(`"${app.name}"님의 완료를 취소하시겠습니까?`)) {
+                                  updateStatus(app.id, 'pending');
+                                }
+                              }}
+                              className="bg-gray-500 text-white px-3 py-2 rounded text-sm font-bold hover:bg-gray-600 transition"
+                            >
+                              취소
+                            </button>
                           </div>
                         ) : (
                           <button
