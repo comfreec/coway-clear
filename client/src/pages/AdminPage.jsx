@@ -1574,7 +1574,7 @@ function AdminPage() {
                     const month = selectedMonth.getMonth();
                     const filteredApps = allApplicationsData
                       .filter(app => {
-                        if (!app.preferred_date || app.status === 'completed') return false;
+                        if (!app.preferred_date) return false;
 
                         // 선택된 날짜가 있으면 해당 날짜만
                         if (selectedDate) {
@@ -1597,22 +1597,32 @@ function AdminPage() {
                     }
 
                     return filteredApps.map((app, idx) => (
-                      <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
-                        <div className="font-bold text-blue-800">
+                      <div key={idx} className={`border rounded-lg p-3 mb-2 ${app.status === 'completed' ? 'bg-gray-100 border-gray-300' : 'bg-blue-50 border-blue-200'}`}>
+                        <div className={`font-bold ${app.status === 'completed' ? 'text-gray-500 line-through decoration-red-500 decoration-2' : 'text-blue-800'}`}>
                           {app.preferred_date} &nbsp;&nbsp; {app.preferred_time}
                         </div>
-                        <div className="text-gray-800">{app.name} - {app.phone}</div>
-                        <div className="text-gray-600 text-sm truncate">{app.address}</div>
-                        <button
-                          onClick={() => {
-                            if (confirm(`"${app.name}"님을 완료 처리하시겠습니까?`)) {
-                              updateStatus(app.id, 'completed');
-                            }
-                          }}
-                          className="mt-2 w-full bg-green-500 text-white px-3 py-2 rounded text-sm font-bold hover:bg-green-600 transition"
-                        >
-                          ✓ 완료 처리
-                        </button>
+                        <div className={`${app.status === 'completed' ? 'text-gray-500 line-through decoration-red-500 decoration-2' : 'text-gray-800'}`}>
+                          {app.name} - {app.phone}
+                        </div>
+                        <div className={`text-sm truncate ${app.status === 'completed' ? 'text-gray-400 line-through decoration-red-500 decoration-2' : 'text-gray-600'}`}>
+                          {app.address}
+                        </div>
+                        {app.status === 'completed' ? (
+                          <div className="mt-2 text-center text-red-500 font-bold text-sm">
+                            ✓ 완료됨
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              if (confirm(`"${app.name}"님을 완료 처리하시겠습니까?`)) {
+                                updateStatus(app.id, 'completed');
+                              }
+                            }}
+                            className="mt-2 w-full bg-green-500 text-white px-3 py-2 rounded text-sm font-bold hover:bg-green-600 transition"
+                          >
+                            ✓ 완료 처리
+                          </button>
+                        )}
                       </div>
                     ));
                   })()}
