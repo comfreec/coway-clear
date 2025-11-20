@@ -20,7 +20,6 @@ function AdminPage() {
   const [posts, setPosts] = useState([]);
   const [stats, setStats] = useState(null);
   const [filter, setFilter] = useState('all');
-  const [searchDate, setSearchDate] = useState(''); // 날짜 검색
   const [activeTab, setActiveTab] = useState('applications'); // 'applications' or 'posts'
   const [viewArchived, setViewArchived] = useState(false); // 보관함 보기
   const [loading, setLoading] = useState(true);
@@ -108,7 +107,7 @@ function AdminPage() {
       // Firebase 미설정 시 API 사용
       fetchData();
     }
-  }, [isAuthenticated, activeTab, viewArchived, filter, searchDate, searchQuery, sortBy]);
+  }, [isAuthenticated, activeTab, viewArchived, filter, searchQuery, sortBy]);
 
   // 검색 실행
   const handleSearch = () => {
@@ -145,16 +144,8 @@ function AdminPage() {
       );
     }
 
-    // 날짜 검색
-    if (searchDate) {
-      filteredApps = filteredApps.filter(app => {
-        if (!app.preferred_date) return false;
-        if (app.status === 'completed') return false;
-        return app.preferred_date === searchDate;
-      });
-    }
     // 상태 필터링
-    else if (filter === 'confirmed') {
+    if (filter === 'confirmed') {
       filteredApps = filteredApps.filter(app => {
         return app.preferred_date && app.preferred_time && app.status !== 'completed';
       });
@@ -861,27 +852,6 @@ function AdminPage() {
               </button>
             </div>
 
-            {/* 날짜 검색 */}
-            <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-                📅 컨택날짜:
-              </label>
-              <input
-                type="date"
-                value={searchDate}
-                onChange={(e) => setSearchDate(e.target.value)}
-                className="border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-coway-blue"
-              />
-              {searchDate && (
-                <button
-                  onClick={() => setSearchDate('')}
-                  className="bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600 transition text-sm"
-                >
-                  초기화
-                </button>
-              )}
-            </div>
-
             {/* 보관함 관리 */}
             <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-200">
               {!viewArchived && (
@@ -895,7 +865,6 @@ function AdminPage() {
               <button
                 onClick={() => {
                   setViewArchived(!viewArchived);
-                  setSearchDate('');
                   setFilter('all');
                 }}
                 className={`px-4 py-2 rounded-lg font-semibold transition ${
