@@ -66,12 +66,31 @@ function HomePage() {
           </div>
 
           {customPrefix && (
-            <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 px-2">
+            <div
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 px-2"
+              style={{
+                animation: 'slideInFromLeft 1s ease-out forwards'
+              }}
+            >
               <span className="text-white" style={{ textShadow: '2px 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.3)' }}>
                 {customPrefix}
               </span>
             </div>
           )}
+
+          {/* 슬라이드 애니메이션 CSS */}
+          <style>{`
+            @keyframes slideInFromLeft {
+              0% {
+                opacity: 0;
+                transform: translateX(-100px);
+              }
+              100% {
+                opacity: 1;
+                transform: translateX(0);
+              }
+            }
+          `}</style>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 px-2" style={{ lineHeight: '1.5' }}>
             <span className="text-yellow-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">5만원 상당</span><br />
             매트리스 케어를<br />
