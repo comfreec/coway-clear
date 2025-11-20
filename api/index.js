@@ -208,12 +208,13 @@ export default async function handler(req, res) {
     // 3. 신청 상태 업데이트
     if (path.startsWith('/applications/') && method === 'PATCH') {
       const id = path.split('/')[2];
-      const { status, preferred_date, preferred_time } = req.body;
+      const { status, preferred_date, preferred_time, memo } = req.body;
 
       const updateData = {};
       if (status !== undefined) updateData.status = status;
       if (preferred_date !== undefined) updateData.preferred_date = preferred_date;
       if (preferred_time !== undefined) updateData.preferred_time = preferred_time;
+      if (memo !== undefined) updateData.memo = memo;
 
       await db.collection('applications').doc(id).update(updateData);
 
