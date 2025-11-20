@@ -75,7 +75,7 @@ function HomePage() {
                   WebkitBackgroundClip: 'text',
                   backgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  animation: 'shimmer 3s ease-in-out infinite',
+                  animation: 'shimmer 6s ease-in-out infinite',
                   textShadow: 'none'
                 }}
               >
