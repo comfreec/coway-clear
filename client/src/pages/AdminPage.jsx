@@ -542,7 +542,7 @@ function AdminPage() {
     <div className="py-8 bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-4xl font-bold">진호/정식 관리자</h1>
+          <h1 className="text-2xl font-bold">진호/정식 관리자</h1>
           <button
             onClick={handleLogout}
             className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition"
