@@ -27,8 +27,14 @@ function AdminPage() {
   const [activeSessions, setActiveSessions] = useState([]); // 접속 중인 관리자
   const [showStats, setShowStats] = useState(false); // 통계 모달
   const [allApplicationsData, setAllApplicationsData] = useState([]); // 전체 데이터 (통계용)
+  const [searchQuery, setSearchQuery] = useState(''); // 검색어
+  const [sortBy, setSortBy] = useState('date'); // 정렬 기준
+  const [showCalendar, setShowCalendar] = useState(false); // 캘린더 모달
+  const [selectedMonth, setSelectedMonth] = useState(new Date()); // 선택된 월
   const sessionIdRef = useRef(null);
   const heartbeatIntervalRef = useRef(null);
+  const prevCountRef = useRef(0); // 이전 신청 수 (알림음용)
+  const audioRef = useRef(null); // 알림음
 
   // 페이지 로드 시 인증 상태 확인
   useEffect(() => {
@@ -101,15 +107,31 @@ function AdminPage() {
       // Firebase 미설정 시 API 사용
       fetchData();
     }
-  }, [isAuthenticated, activeTab, viewArchived, filter, searchDate]);
+  }, [isAuthenticated, activeTab, viewArchived, filter, searchDate, searchQuery, sortBy]);
 
   // 데이터 처리 공통 함수
   const processAndSetApplications = (allApps) => {
+    // 알림음: 새 신청이 들어왔는지 확인
+    if (prevCountRef.current > 0 && allApps.length > prevCountRef.current) {
+      playNotificationSound();
+    }
+    prevCountRef.current = allApps.length;
+
     // 전체 데이터 저장 (통계용)
     setAllApplicationsData(allApps);
 
     // 클라이언트 측에서 필터링
     let filteredApps = allApps;
+
+    // 검색어 필터링
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filteredApps = filteredApps.filter(app =>
+        app.name?.toLowerCase().includes(query) ||
+        app.phone?.includes(query) ||
+        app.address?.toLowerCase().includes(query)
+      );
+    }
 
     // 날짜 검색
     if (searchDate) {
@@ -134,11 +156,22 @@ function AdminPage() {
       filteredApps = filteredApps.filter(app => app.status === filter);
     }
 
-    // 정렬: 완료건은 뒤로, 나머지는 최신순
+    // 정렬
     filteredApps.sort((a, b) => {
+      // 완료건은 항상 뒤로
       if (a.status === 'completed' && b.status !== 'completed') return 1;
       if (a.status !== 'completed' && b.status === 'completed') return -1;
-      return new Date(b.created_at) - new Date(a.created_at);
+
+      // 선택한 정렬 기준 적용
+      switch (sortBy) {
+        case 'name':
+          return (a.name || '').localeCompare(b.name || '', 'ko');
+        case 'area':
+          return (a.address || '').localeCompare(b.address || '', 'ko');
+        case 'date':
+        default:
+          return new Date(b.created_at) - new Date(a.created_at);
+      }
     });
 
     setApplications(filteredApps);
@@ -371,6 +404,31 @@ function AdminPage() {
       console.error('날짜/시간 업데이트 실패:', error);
       alert('날짜/시간 업데이트 중 오류가 발생했습니다.');
     }
+  };
+
+  // 메모 저장
+  const updateMemo = async (id, memo) => {
+    try {
+      const response = await api.patch(`/api/applications/${id}`, { memo });
+      if (response.data.success) {
+        // 조용히 업데이트 (알림 없이)
+        fetchData();
+      }
+    } catch (error) {
+      console.error('메모 저장 실패:', error);
+    }
+  };
+
+  // 알림음 재생
+  const playNotificationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(err => console.log('알림음 재생 실패:', err));
+    }
+  };
+
+  // 반복 고객 확인 (같은 전화번호)
+  const getRepeatCount = (phone) => {
+    return allApplicationsData.filter(app => app.phone === phone).length;
   };
 
   const deleteApplication = async (id, name) => {
@@ -678,14 +736,53 @@ function AdminPage() {
           </div>
         )}
 
-        {/* 통계 보기 버튼 */}
-        <div className="mb-6">
+        {/* 알림음 */}
+        <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto" />
+
+        {/* 통계/캘린더 버튼 */}
+        <div className="mb-6 flex flex-wrap gap-3">
           <button
             onClick={() => setShowStats(true)}
             className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition flex items-center gap-2"
           >
-            📊 월별 통계 보기
+            📊 월별 통계
           </button>
+          <button
+            onClick={() => setShowCalendar(true)}
+            className="bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition flex items-center gap-2"
+          >
+            📅 일정 캘린더
+          </button>
+        </div>
+
+        {/* 검색 및 정렬 */}
+        <div className="bg-white p-4 rounded-lg shadow mb-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* 검색 */}
+            <div className="flex-1">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">🔍 고객 검색</label>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="이름, 전화번호, 주소로 검색..."
+                className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-coway-blue"
+              />
+            </div>
+            {/* 정렬 */}
+            <div className="md:w-48">
+              <label className="block text-sm font-semibold text-gray-700 mb-1">🔄 정렬</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full border-2 border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-coway-blue"
+              >
+                <option value="date">신청일순</option>
+                <option value="name">이름순</option>
+                <option value="area">지역순</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* 필터 버튼 */}
@@ -822,11 +919,16 @@ function AdminPage() {
                 )}
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <div className="font-bold text-lg text-gray-900">{app.name}</div>
                       {app.preferred_date && app.preferred_time && !viewArchived && (
                         <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold">
                           ✓ 컨택완료
+                        </span>
+                      )}
+                      {getRepeatCount(app.phone) > 1 && (
+                        <span className="bg-purple-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                          🔄 {getRepeatCount(app.phone)}회차
                         </span>
                       )}
                     </div>
@@ -854,6 +956,24 @@ function AdminPage() {
                     <span className="font-semibold">매트리스:</span> {app.mattress_type || '-'} ({app.mattress_age || '-'})
                   </div>
                 </div>
+
+                {/* 메모 입력 */}
+                {!viewArchived && (
+                  <div className="mt-3 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                    <label className="block text-sm font-semibold text-yellow-800 mb-1">📝 메모</label>
+                    <textarea
+                      defaultValue={app.memo || ''}
+                      placeholder="고객 관련 메모 입력..."
+                      rows="2"
+                      className="w-full border border-yellow-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                      onBlur={(e) => {
+                        if (e.target.value !== (app.memo || '')) {
+                          updateMemo(app.id, e.target.value);
+                        }
+                      }}
+                    />
+                  </div>
+                )}
 
                 <div className="mt-4 space-y-3">
                   {/* 약속 날짜/시간 입력 (일반 보기만) */}
@@ -1028,14 +1148,35 @@ function AdminPage() {
                       {viewArchived && app.archived_at ? formatDate(app.archived_at) : formatDate(app.created_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span>{app.name}</span>
                         {app.preferred_date && app.preferred_time && !viewArchived && (
                           <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full font-bold whitespace-nowrap">
                             ✓ 컨택완료
                           </span>
                         )}
+                        {getRepeatCount(app.phone) > 1 && (
+                          <span className="bg-purple-500 text-white text-xs px-2 py-0.5 rounded-full font-bold whitespace-nowrap">
+                            🔄 {getRepeatCount(app.phone)}회차
+                          </span>
+                        )}
                       </div>
+                      {/* 메모 (데스크톱) */}
+                      {!viewArchived && (
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            defaultValue={app.memo || ''}
+                            placeholder="메모..."
+                            className="w-full border border-yellow-300 bg-yellow-50 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                            onBlur={(e) => {
+                              if (e.target.value !== (app.memo || '')) {
+                                updateMemo(app.id, e.target.value);
+                              }
+                            }}
+                          />
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {app.phone}
@@ -1226,6 +1367,103 @@ function AdminPage() {
                 <div className="mt-6 text-center">
                   <button
                     onClick={() => setShowStats(false)}
+                    className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition"
+                  >
+                    닫기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 캘린더 모달 */}
+        {showCalendar && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">📅 일정 캘린더</h2>
+                  <button
+                    onClick={() => setShowCalendar(false)}
+                    className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* 월 선택 */}
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <button
+                    onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1))}
+                    className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition font-bold"
+                  >
+                    ◀ 이전
+                  </button>
+                  <span className="text-xl font-bold">
+                    {selectedMonth.getFullYear()}년 {selectedMonth.getMonth() + 1}월
+                  </span>
+                  <button
+                    onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1))}
+                    className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition font-bold"
+                  >
+                    다음 ▶
+                  </button>
+                </div>
+
+                {/* 캘린더 그리드 */}
+                <div className="grid grid-cols-7 gap-1">
+                  {/* 요일 헤더 */}
+                  {['일', '월', '화', '수', '목', '금', '토'].map(day => (
+                    <div key={day} className={`text-center py-2 font-bold text-sm ${day === '일' ? 'text-red-500' : day === '토' ? 'text-blue-500' : 'text-gray-700'}`}>
+                      {day}
+                    </div>
+                  ))}
+
+                  {/* 날짜 */}
+                  {(() => {
+                    const year = selectedMonth.getFullYear();
+                    const month = selectedMonth.getMonth();
+                    const firstDay = new Date(year, month, 1).getDay();
+                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+                    const cells = [];
+
+                    // 빈 셀
+                    for (let i = 0; i < firstDay; i++) {
+                      cells.push(<div key={`empty-${i}`} className="h-20"></div>);
+                    }
+
+                    // 날짜 셀
+                    for (let day = 1; day <= daysInMonth; day++) {
+                      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                      const appointments = allApplicationsData.filter(app =>
+                        app.preferred_date === dateStr && app.status !== 'completed'
+                      );
+
+                      cells.push(
+                        <div key={day} className={`h-20 border rounded p-1 text-xs overflow-hidden ${appointments.length > 0 ? 'bg-blue-50 border-blue-300' : 'bg-gray-50'}`}>
+                          <div className={`font-bold mb-1 ${new Date(year, month, day).getDay() === 0 ? 'text-red-500' : new Date(year, month, day).getDay() === 6 ? 'text-blue-500' : ''}`}>
+                            {day}
+                          </div>
+                          {appointments.slice(0, 2).map((app, idx) => (
+                            <div key={idx} className="bg-blue-500 text-white rounded px-1 mb-0.5 truncate">
+                              {app.preferred_time} {app.name}
+                            </div>
+                          ))}
+                          {appointments.length > 2 && (
+                            <div className="text-blue-600 font-bold">+{appointments.length - 2}건</div>
+                          )}
+                        </div>
+                      );
+                    }
+
+                    return cells;
+                  })()}
+                </div>
+
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => setShowCalendar(false)}
                     className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition"
                   >
                     닫기
