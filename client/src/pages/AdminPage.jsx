@@ -1607,7 +1607,6 @@ function AdminPage() {
                           onClick={() => {
                             if (confirm(`"${app.name}"님을 완료 처리하시겠습니까?`)) {
                               updateStatus(app.id, 'completed');
-                              setShowCalendar(false);
                             }
                           }}
                           className="mt-2 w-full bg-green-500 text-white px-3 py-2 rounded text-sm font-bold hover:bg-green-600 transition"
