@@ -752,7 +752,7 @@ function AdminPage() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              📋 <span className="hidden sm:inline">신청 </span>관리
+              📋 신청<span className="hidden sm:inline"> 관리</span>
             </button>
             <button
               onClick={() => setActiveTab('posts')}
@@ -762,7 +762,7 @@ function AdminPage() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              ⭐ <span className="hidden sm:inline">후기 </span>관리
+              ⭐ 후기<span className="hidden sm:inline"> 관리</span>
             </button>
             <button
               onClick={() => setActiveTab('settings')}
