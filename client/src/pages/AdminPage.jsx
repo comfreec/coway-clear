@@ -1765,14 +1765,14 @@ function AdminPage() {
                 <h3 className="text-lg font-bold text-gray-800 mb-4">📱 미리보기</h3>
                 <div className="bg-gray-900 text-white p-6 rounded-lg text-center">
                   {customPrefixInput && (
-                    <div className="text-yellow-400 text-lg md:text-xl font-bold mb-2">
+                    <div className="text-xl md:text-2xl font-bold mb-3 bg-gradient-to-r from-green-300 to-cyan-300 bg-clip-text text-transparent">
                       {customPrefixInput}
                     </div>
                   )}
                   <div className="text-2xl md:text-3xl font-bold">
-                    5만원 상당<br/>
+                    <span className="text-yellow-300">5만원 상당</span><br/>
                     매트리스 케어를<br/>
-                    지금 100% 무료로!
+                    <span className="bg-gradient-to-r from-yellow-300 to-green-300 bg-clip-text text-transparent">지금 100% 무료</span>로!
                   </div>
                 </div>
               </div>

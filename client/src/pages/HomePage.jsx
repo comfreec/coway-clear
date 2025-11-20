@@ -66,8 +66,10 @@ function HomePage() {
           </div>
 
           {customPrefix && (
-            <div className="text-yellow-400 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3 px-2">
-              {customPrefix}
+            <div className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 px-2 drop-shadow-lg">
+              <span className="bg-gradient-to-r from-green-300 to-cyan-300 bg-clip-text text-transparent">
+                {customPrefix}
+              </span>
             </div>
           )}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 px-2" style={{ lineHeight: '1.5' }}>
