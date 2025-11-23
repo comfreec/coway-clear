@@ -66,8 +66,8 @@ function HomePage() {
           (prev + 1) % socialProofData.length
         );
         setShowNotification(true);
-      }, 500); // 0.5초 후 다음 알림
-    }, 5000); // 5초마다 변경
+      }, 1000); // 1초 후 다음 알림
+    }, 8000); // 8초마다 변경
 
     return () => {
       clearTimeout(startTimer);
@@ -608,23 +608,23 @@ function HomePage() {
 
       {/* Social Proof 알림 */}
       <div
-        className={`fixed bottom-4 left-4 z-50 transition-all duration-500 ${
+        className={`fixed bottom-4 left-4 z-50 transition-all duration-700 ${
           showNotification
             ? 'opacity-100 translate-x-0'
             : 'opacity-0 -translate-x-full'
         }`}
       >
-        <div className="bg-white rounded-lg shadow-2xl border-l-4 border-green-500 p-4 max-w-xs">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-2xl border-l-4 border-yellow-400 p-4 max-w-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-green-600 text-lg">✓</span>
+            <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-blue-800 text-lg font-bold">✓</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-gray-900 truncate">
+              <p className="text-sm font-bold text-white truncate">
                 {socialProofData[currentNotificationIndex]?.name}님이 신청했습니다
               </p>
-              <p className="text-xs text-gray-500">
-                {socialProofData[currentNotificationIndex]?.location} · {socialProofData[currentNotificationIndex]?.time}
+              <p className="text-xs text-yellow-300 font-semibold">
+                {socialProofData[currentNotificationIndex]?.time}
               </p>
             </div>
           </div>
