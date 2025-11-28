@@ -263,6 +263,15 @@ function HomePage() {
             >
               ⭐ 고객 후기 보기 (만족도 4.9/5)
             </Link>
+
+            <a
+              href="https://m.youtube.com/watch?v=terNhLRFTwI&pp=0gcJCR4Bo7VqN5tD4gcMEgpwZXJwbGV4aXR5"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 sm:px-8 py-3 md:py-4 rounded-full text-sm md:text-base font-bold hover:scale-105 transition-all shadow-xl whitespace-nowrap border-2 border-purple-400"
+            >
+              📹 진드기 위험성 영상 보기
+            </a>
           </div>
 
           <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-xs md:text-sm px-4">
