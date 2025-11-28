@@ -223,6 +223,17 @@ function HomePage() {
                 background-position: -200% center;
               }
             }
+
+            @keyframes pulseCard {
+              0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+              }
+              50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+              }
+            }
           `}</style>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 px-2" style={{ lineHeight: '1.5' }}>
             <span className="text-yellow-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl">5만원 상당</span><br />
@@ -356,8 +367,14 @@ function HomePage() {
               {/* Before */}
               <div
                 onClick={() => setShowDirtyPhotos(true)}
-                className="bg-red-900/30 border-4 border-red-500 rounded-2xl p-6 md:p-8 cursor-pointer hover:scale-105 transition-transform"
+                className="relative bg-red-900/30 border-4 border-red-500 rounded-2xl p-6 md:p-8 cursor-pointer hover:scale-105 transition-transform"
+                style={{ animation: 'pulseCard 2s ease-in-out infinite' }}
               >
+                {/* 클릭 유도 배지 */}
+                <div className="absolute -top-3 -right-3 bg-yellow-400 text-red-900 px-3 py-1.5 rounded-full text-xs md:text-sm font-black shadow-lg border-2 border-yellow-300 animate-bounce">
+                  👆 클릭하여 사진 보기
+                </div>
+
                 <div className="bg-red-500 text-white text-center py-2 rounded-lg mb-4 font-bold text-lg">
                   ❌ 케어 전 (사진 보기)
                 </div>
