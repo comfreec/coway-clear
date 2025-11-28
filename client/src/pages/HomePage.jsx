@@ -667,9 +667,9 @@ function HomePage() {
                   <img
                     src={imageSrc}
                     alt={`오염된 매트리스 ${idx + 1}`}
-                    className="w-full h-48 md:h-64 object-cover"
+                    className="w-full h-40 md:h-64 object-cover"
                   />
-                  <div className="p-2 md:p-3 bg-red-600 text-white text-center font-bold text-sm md:text-base">
+                  <div className="p-2 md:p-3 bg-red-600 text-white text-center font-bold text-xs md:text-base">
                     😱 케어 전 실제 모습
                   </div>
                 </div>
