@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { db, isFirebaseConfigured } from '../firebase';
 import { collection, onSnapshot, query, doc, setDoc, deleteDoc, serverTimestamp, where, orderBy } from 'firebase/firestore';
@@ -13,6 +14,7 @@ const api = axios.create({
 });
 
 function AdminPage() {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -288,6 +290,7 @@ function AdminPage() {
     setIsAuthenticated(false);
     sessionStorage.removeItem('adminAuth');
     setPassword('');
+    navigate('/');
   };
 
   // 브라우저 정보 가져오기
