@@ -13,6 +13,17 @@ function HomePage() {
   const [showNotification, setShowNotification] = useState(false);
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
   const [showDirtyPhotos, setShowDirtyPhotos] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+
+  const dirtyImages = [dirtyImage1, dirtyImage2, dirtyImage3];
+
+  const nextPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev + 1) % dirtyImages.length);
+  };
+
+  const prevPhoto = () => {
+    setCurrentPhotoIndex((prev) => (prev - 1 + dirtyImages.length) % dirtyImages.length);
+  };
 
   // Social Proof 가짜 데이터 (20명)
   const socialProofData = [
@@ -643,13 +654,19 @@ function HomePage() {
       {/* 오염된 매트리스 사진 모달 */}
       {showDirtyPhotos && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-3 md:p-4 overflow-y-auto"
-          onClick={() => setShowDirtyPhotos(false)}
+          className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-3 md:p-4"
+          onClick={() => {
+            setShowDirtyPhotos(false);
+            setCurrentPhotoIndex(0);
+          }}
         >
-          <div className="relative max-w-4xl w-full my-8" onClick={(e) => e.stopPropagation()}>
+          <div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
             {/* 닫기 버튼 */}
             <button
-              onClick={() => setShowDirtyPhotos(false)}
+              onClick={() => {
+                setShowDirtyPhotos(false);
+                setCurrentPhotoIndex(0);
+              }}
               className="absolute -top-10 md:-top-12 right-0 text-white text-3xl md:text-4xl font-bold hover:text-red-500 transition z-10"
             >
               ✕
@@ -660,17 +677,51 @@ function HomePage() {
               ⚠️ 충격 주의! 실제 오염된 매트리스
             </h2>
 
-            {/* 사진들 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-              {[dirtyImage1, dirtyImage2, dirtyImage3].map((imageSrc, idx) => (
-                <div key={idx} className="bg-gray-900 rounded-lg overflow-hidden shadow-2xl">
-                  <img
-                    src={imageSrc}
-                    alt={`오염된 매트리스 ${idx + 1}`}
-                    className="w-full h-48 md:h-64 object-contain"
+            {/* 이미지 슬라이더 */}
+            <div className="relative bg-gray-900 rounded-lg overflow-hidden shadow-2xl">
+              {/* 이전/다음 버튼 */}
+              <button
+                onClick={prevPhoto}
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 md:p-3 rounded-full transition z-10"
+              >
+                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button
+                onClick={nextPhoto}
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 md:p-3 rounded-full transition z-10"
+              >
+                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* 이미지 */}
+              <img
+                src={dirtyImages[currentPhotoIndex]}
+                alt={`오염된 매트리스 ${currentPhotoIndex + 1}`}
+                className="w-full h-64 md:h-96 object-contain"
+              />
+
+              {/* 페이지 인디케이터 */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {dirtyImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentPhotoIndex(idx)}
+                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition ${
+                      idx === currentPhotoIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+                    }`}
                   />
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* 사진 번호 */}
+            <div className="text-white text-center mt-3 text-sm md:text-base">
+              {currentPhotoIndex + 1} / {dirtyImages.length}
             </div>
 
             {/* 경고 메시지 */}
@@ -683,7 +734,10 @@ function HomePage() {
             <div className="mt-3 md:mt-4 text-center px-2">
               <Link
                 to="/application"
-                onClick={() => setShowDirtyPhotos(false)}
+                onClick={() => {
+                  setShowDirtyPhotos(false);
+                  setCurrentPhotoIndex(0);
+                }}
                 className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-xl font-black hover:scale-105 transition-transform shadow-2xl w-full md:w-auto"
               >
                 🎁 지금 무료로 케어 신청하기
