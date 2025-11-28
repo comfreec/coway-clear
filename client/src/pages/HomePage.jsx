@@ -26,6 +26,34 @@ function HomePage() {
     setCurrentPhotoIndex((prev) => (prev - 1 + dirtyImages.length) % dirtyImages.length);
   };
 
+  // 터치/스와이프 지원
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextPhoto();
+    } else if (isRightSwipe) {
+      prevPhoto();
+    }
+  };
+
   // Social Proof 가짜 데이터 (20명)
   const socialProofData = [
     { name: '김민수', location: '서울 강남구', time: '방금 전' },
@@ -682,30 +710,26 @@ function HomePage() {
 
             {/* 이미지 슬라이더 */}
             <div className="relative bg-gray-900 rounded-lg overflow-hidden shadow-2xl">
-              {!isZoomed && (
-                <>
-                  {/* 이전/다음 버튼 */}
-                  <button
-                    onClick={prevPhoto}
-                    className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 md:p-3 rounded-full transition z-10"
-                  >
-                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                  </button>
+              {/* 이전/다음 버튼 - 항상 표시 */}
+              <button
+                onClick={prevPhoto}
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 md:p-3 rounded-full transition z-10"
+              >
+                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
 
-                  <button
-                    onClick={nextPhoto}
-                    className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 md:p-3 rounded-full transition z-10"
-                  >
-                    <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </>
-              )}
+              <button
+                onClick={nextPhoto}
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 md:p-3 rounded-full transition z-10"
+              >
+                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
 
-              {/* 이미지 */}
+              {/* 이미지 - 터치/스와이프 지원 */}
               <img
                 src={dirtyImages[currentPhotoIndex]}
                 alt={`오염된 매트리스 ${currentPhotoIndex + 1}`}
@@ -713,12 +737,15 @@ function HomePage() {
                   isZoomed ? 'h-[70vh] md:h-[80vh]' : 'h-64 md:h-96'
                 } object-contain`}
                 onClick={() => setIsZoomed(!isZoomed)}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
               />
 
               {/* 확대 힌트 */}
               {!isZoomed && (
                 <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white text-xs md:text-sm px-3 py-1 rounded-full pointer-events-none">
-                  🔍 클릭하여 확대
+                  🔍 클릭 확대 · 좌우 슬라이드
                 </div>
               )}
 
