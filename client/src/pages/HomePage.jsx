@@ -657,12 +657,16 @@ function HomePage() {
 
             {/* 사진들 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[1, 2, 3].map((num) => (
-                <div key={num} className="bg-white rounded-lg overflow-hidden shadow-2xl">
+              {['1.jpg', '2.jpg', '3.jpg'].map((filename, idx) => (
+                <div key={filename} className="bg-white rounded-lg overflow-hidden shadow-2xl">
                   <img
-                    src={`/images/${num}.jpg`}
-                    alt={`오염된 매트리스 ${num}`}
+                    src={`/images/${filename}`}
+                    alt={`오염된 매트리스 ${idx + 1}`}
                     className="w-full h-64 object-cover"
+                    onError={(e) => {
+                      console.error(`이미지 로드 실패: /images/${filename}`);
+                      e.target.src = '/vite.svg'; // 폴백 이미지
+                    }}
                   />
                   <div className="p-3 bg-red-600 text-white text-center font-bold">
                     😱 케어 전 실제 모습
