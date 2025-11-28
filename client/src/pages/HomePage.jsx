@@ -14,7 +14,7 @@ function HomePage() {
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
   const [showDirtyPhotos, setShowDirtyPhotos] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [isZoomed, setIsZoomed] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(true);
 
   const dirtyImages = [dirtyImage1, dirtyImage2, dirtyImage3];
 
@@ -687,7 +687,7 @@ function HomePage() {
           onClick={() => {
             setShowDirtyPhotos(false);
             setCurrentPhotoIndex(0);
-            setIsZoomed(false);
+            setIsZoomed(true);
           }}
         >
           <div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
@@ -696,7 +696,7 @@ function HomePage() {
               onClick={() => {
                 setShowDirtyPhotos(false);
                 setCurrentPhotoIndex(0);
-                setIsZoomed(false);
+                setIsZoomed(true);
               }}
               className="absolute -top-10 md:-top-12 right-0 text-white text-3xl md:text-4xl font-bold hover:text-red-500 transition z-10"
             >
@@ -742,27 +742,23 @@ function HomePage() {
                 onTouchEnd={onTouchEnd}
               />
 
-              {/* 확대 힌트 */}
-              {!isZoomed && (
-                <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white text-xs md:text-sm px-3 py-1 rounded-full pointer-events-none">
-                  🔍 클릭 확대 · 좌우 슬라이드
-                </div>
-              )}
+              {/* 확대/축소 힌트 */}
+              <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white text-xs md:text-sm px-3 py-1 rounded-full pointer-events-none">
+                {isZoomed ? '🔍 클릭 축소 · 좌우 슬라이드' : '🔍 클릭 확대 · 좌우 슬라이드'}
+              </div>
 
-              {/* 페이지 인디케이터 */}
-              {!isZoomed && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {dirtyImages.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentPhotoIndex(idx)}
-                      className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition ${
-                        idx === currentPhotoIndex ? 'bg-white' : 'bg-white bg-opacity-50'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
+              {/* 페이지 인디케이터 - 항상 표시 */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {dirtyImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentPhotoIndex(idx)}
+                    className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition ${
+                      idx === currentPhotoIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* 사진 번호 */}
@@ -783,7 +779,7 @@ function HomePage() {
                 onClick={() => {
                   setShowDirtyPhotos(false);
                   setCurrentPhotoIndex(0);
-                  setIsZoomed(false);
+                  setIsZoomed(true);
                 }}
                 className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-xl font-black hover:scale-105 transition-transform shadow-2xl w-full md:w-auto"
               >
