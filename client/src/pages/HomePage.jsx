@@ -643,33 +643,33 @@ function HomePage() {
       {/* 오염된 매트리스 사진 모달 */}
       {showDirtyPhotos && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center p-3 md:p-4 overflow-y-auto"
           onClick={() => setShowDirtyPhotos(false)}
         >
-          <div className="relative max-w-4xl w-full">
+          <div className="relative max-w-4xl w-full my-8" onClick={(e) => e.stopPropagation()}>
             {/* 닫기 버튼 */}
             <button
               onClick={() => setShowDirtyPhotos(false)}
-              className="absolute -top-12 right-0 text-white text-4xl font-bold hover:text-red-500 transition"
+              className="absolute -top-10 md:-top-12 right-0 text-white text-3xl md:text-4xl font-bold hover:text-red-500 transition z-10"
             >
               ✕
             </button>
 
             {/* 제목 */}
-            <h2 className="text-white text-2xl md:text-3xl font-bold text-center mb-6">
+            <h2 className="text-white text-xl md:text-3xl font-bold text-center mb-4 md:mb-6 px-2">
               ⚠️ 충격 주의! 실제 오염된 매트리스
             </h2>
 
             {/* 사진들 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
               {[dirtyImage1, dirtyImage2, dirtyImage3].map((imageSrc, idx) => (
                 <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-2xl">
                   <img
                     src={imageSrc}
                     alt={`오염된 매트리스 ${idx + 1}`}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-48 md:h-64 object-cover"
                   />
-                  <div className="p-3 bg-red-600 text-white text-center font-bold">
+                  <div className="p-2 md:p-3 bg-red-600 text-white text-center font-bold text-sm md:text-base">
                     😱 케어 전 실제 모습
                   </div>
                 </div>
@@ -677,17 +677,17 @@ function HomePage() {
             </div>
 
             {/* 경고 메시지 */}
-            <div className="mt-6 bg-red-600 text-white p-4 rounded-lg text-center">
-              <p className="font-bold text-lg mb-2">당신의 매트리스도 이럴 수 있습니다!</p>
-              <p className="text-sm">지금 바로 무료 케어를 신청하세요</p>
+            <div className="mt-4 md:mt-6 bg-red-600 text-white p-3 md:p-4 rounded-lg text-center">
+              <p className="font-bold text-base md:text-lg mb-1 md:mb-2">당신의 매트리스도 이럴 수 있습니다!</p>
+              <p className="text-xs md:text-sm">지금 바로 무료 케어를 신청하세요</p>
             </div>
 
             {/* 신청 버튼 */}
-            <div className="mt-4 text-center">
+            <div className="mt-3 md:mt-4 text-center px-2">
               <Link
                 to="/application"
                 onClick={() => setShowDirtyPhotos(false)}
-                className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 px-8 py-4 rounded-full text-xl font-black hover:scale-110 transition-transform shadow-2xl"
+                className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 px-6 md:px-8 py-3 md:py-4 rounded-full text-base md:text-xl font-black hover:scale-105 transition-transform shadow-2xl w-full md:w-auto"
               >
                 🎁 지금 무료로 케어 신청하기
               </Link>
