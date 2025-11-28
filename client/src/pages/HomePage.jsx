@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 // 이미지 import
-import dirtyImage1 from '../../public/images/1.jpg';
-import dirtyImage2 from '../../public/images/2.jpg';
-import dirtyImage3 from '../../public/images/3.jpg';
+import dirtyImage1 from '../assets/images/1.jpg';
+import dirtyImage2 from '../assets/images/2.jpg';
+import dirtyImage3 from '../assets/images/3.jpg';
 
 function HomePage() {
   const [openFaq, setOpenFaq] = useState(null);
