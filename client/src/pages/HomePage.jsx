@@ -742,10 +742,6 @@ function HomePage() {
                 onTouchEnd={onTouchEnd}
               />
 
-              {/* 확대/축소 힌트 */}
-              <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white text-xs md:text-sm px-3 py-1 rounded-full pointer-events-none">
-                {isZoomed ? '🔍 클릭 축소 · 좌우 슬라이드' : '🔍 클릭 확대 · 좌우 슬라이드'}
-              </div>
 
               {/* 페이지 인디케이터 - 항상 표시 */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
