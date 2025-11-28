@@ -7,6 +7,7 @@ function HomePage() {
   const [customPrefix, setCustomPrefix] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
+  const [showDirtyPhotos, setShowDirtyPhotos] = useState(false);
 
   // Social Proof 가짜 데이터 (20명)
   const socialProofData = [
@@ -267,9 +268,12 @@ function HomePage() {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {/* Before */}
-              <div className="bg-red-900/30 border-4 border-red-500 rounded-2xl p-6 md:p-8">
+              <div
+                onClick={() => setShowDirtyPhotos(true)}
+                className="bg-red-900/30 border-4 border-red-500 rounded-2xl p-6 md:p-8 cursor-pointer hover:scale-105 transition-transform"
+              >
                 <div className="bg-red-500 text-white text-center py-2 rounded-lg mb-4 font-bold text-lg">
-                  ❌ 케어 전
+                  ❌ 케어 전 (클릭하여 실제 사진 보기)
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 text-red-200">
@@ -630,6 +634,62 @@ function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* 오염된 매트리스 사진 모달 */}
+      {showDirtyPhotos && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowDirtyPhotos(false)}
+        >
+          <div className="relative max-w-4xl w-full">
+            {/* 닫기 버튼 */}
+            <button
+              onClick={() => setShowDirtyPhotos(false)}
+              className="absolute -top-12 right-0 text-white text-4xl font-bold hover:text-red-500 transition"
+            >
+              ✕
+            </button>
+
+            {/* 제목 */}
+            <h2 className="text-white text-2xl md:text-3xl font-bold text-center mb-6">
+              ⚠️ 충격 주의! 실제 오염된 매트리스
+            </h2>
+
+            {/* 사진들 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[1, 2, 3].map((num) => (
+                <div key={num} className="bg-white rounded-lg overflow-hidden shadow-2xl">
+                  <img
+                    src={`/images/${num}.jpg`}
+                    alt={`오염된 매트리스 ${num}`}
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="p-3 bg-red-600 text-white text-center font-bold">
+                    😱 케어 전 실제 모습
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 경고 메시지 */}
+            <div className="mt-6 bg-red-600 text-white p-4 rounded-lg text-center">
+              <p className="font-bold text-lg mb-2">당신의 매트리스도 이럴 수 있습니다!</p>
+              <p className="text-sm">지금 바로 무료 케어를 신청하세요</p>
+            </div>
+
+            {/* 신청 버튼 */}
+            <div className="mt-4 text-center">
+              <Link
+                to="/application"
+                onClick={() => setShowDirtyPhotos(false)}
+                className="inline-block bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-900 px-8 py-4 rounded-full text-xl font-black hover:scale-110 transition-transform shadow-2xl"
+              >
+                🎁 지금 무료로 케어 신청하기
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Social Proof 애니메이션 CSS */}
       <style>{`
