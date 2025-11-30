@@ -581,6 +581,18 @@ export default async function handler(req, res) {
       return res.json({ success: true, prospects });
     }
 
+    // 12-2. 가망고객 삭제
+    if (path.startsWith('/prospects/') && method === 'DELETE') {
+      const id = path.split('/')[2];
+
+      await db.collection('prospects').doc(id).delete();
+
+      return res.json({
+        success: true,
+        message: '가망고객이 삭제되었습니다.'
+      });
+    }
+
     // 13. 설정 조회
     if (path === '/settings' && method === 'GET') {
       const settingsDoc = await db.collection('settings').doc('site').get();
