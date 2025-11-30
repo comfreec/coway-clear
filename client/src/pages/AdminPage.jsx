@@ -1051,7 +1051,7 @@ function AdminPage() {
                     : 'bg-white border-blue-400'
                 }`}
               >
-                {app.status === 'completed' && (
+                {app.status === 'completed' && !viewProspects && (
                   <div className="absolute inset-0 pointer-events-none" style={{
                     background: 'linear-gradient(to top right, transparent 0%, transparent calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% + 2px), transparent calc(50% + 2px), transparent 100%)'
                   }}></div>
@@ -1137,7 +1137,7 @@ function AdminPage() {
 
                 <div className="mt-4 space-y-3">
                   {/* 약속 날짜/시간 입력 (일반 보기만) */}
-                  {!viewArchived && (
+                  {!viewArchived && !viewProspects && (
                     <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
                       <label className="block text-sm font-semibold text-blue-800 mb-2">📅 약속 날짜/시간 설정</label>
                       <div className="space-y-2">
@@ -1185,7 +1185,7 @@ function AdminPage() {
                     </div>
                   )}
 
-                  {!viewArchived && (
+                  {!viewArchived && !viewProspects && (
                     <>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">상태 변경</label>
                       <select
@@ -1262,7 +1262,7 @@ function AdminPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     매트리스 정보
                   </th>
-                  {!viewArchived && (
+                  {!viewArchived && !viewProspects && (
                     <>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         컨택일시
@@ -1278,7 +1278,7 @@ function AdminPage() {
                       </th>
                     </>
                   )}
-                  {viewArchived && (
+                  {(viewArchived || viewProspects) && (
                     <>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         컨택일시
@@ -1303,7 +1303,7 @@ function AdminPage() {
                         : 'hover:bg-gray-50'
                     }`}
                   >
-                    {app.status === 'completed' && !viewArchived && (
+                    {app.status === 'completed' && !viewArchived && !viewProspects && (
                       <td className="absolute inset-0 pointer-events-none" colSpan="100" style={{
                         background: 'linear-gradient(to top right, transparent 0%, transparent calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% - 2px), rgba(0, 0, 0, 0.3) calc(50% + 2px), transparent calc(50% + 2px), transparent 100%)'
                       }}></td>
@@ -1372,7 +1372,7 @@ function AdminPage() {
                       <div>{app.mattress_type || '-'}</div>
                       <div className="text-xs text-gray-400">{app.mattress_age || '-'}</div>
                     </td>
-                    {!viewArchived && (
+                    {!viewArchived && !viewProspects && (
                       <td className="px-6 py-4 text-sm text-gray-700">
                         <div className="space-y-2 min-w-[200px]">
                           <input
@@ -1422,7 +1422,7 @@ function AdminPage() {
                         </div>
                       </td>
                     )}
-                    {!viewArchived && (
+                    {!viewArchived && !viewProspects && (
                       <>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getStatusBadge(app.status)}
@@ -1459,7 +1459,7 @@ function AdminPage() {
                         </td>
                       </>
                     )}
-                    {viewArchived && (
+                    {(viewArchived || viewProspects) && (
                       <td className="px-6 py-4 whitespace-nowrap">
                         {getStatusBadge(app.status)}
                       </td>
