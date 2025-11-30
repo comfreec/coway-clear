@@ -161,7 +161,7 @@ function HomePage() {
     },
     {
       q: "어떤 장비를 사용하나요?",
-      a: "전문 UV 살균기, 고온 스팀 클리너, HEPA 필터 진공청소기 등 전문 장비를 사용하여 99.9% 진드기 제거를 보장합니다."
+      a: "전문 UV 살균기, HEPA 필터 진공청소기 등 전문 장비를 사용하여 99.9% 진드기 제거를 보장합니다."
     },
     {
       q: "무료 케어는 몇 번까지 가능한가요?",
@@ -412,7 +412,7 @@ function HomePage() {
                     <span className="text-2xl">✨</span>
                     <div>
                       <div className="font-bold">진드기 99.9% 제거</div>
-                      <div className="text-sm text-gray-300">전문 UV 살균 + 고온 스팀</div>
+                      <div className="text-sm text-gray-300">전문 UV 살균</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 text-green-200">
