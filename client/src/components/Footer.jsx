@@ -25,8 +25,8 @@ function Footer() {
             <h4 className="text-lg font-semibold mb-4">연락처</h4>
             <ul className="space-y-2 text-gray-400">
               <li>전화: 010-2417-7936</li>
-              <li>영업시간: 09:00 - 18:00</li>
-              <li>주말 및 공휴일 휴무</li>
+              <li>영업시간: 09:00 - 21:00</li>
+              <li>연중무휴</li>
             </ul>
           </div>
         </div>

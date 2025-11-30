@@ -703,7 +703,7 @@ function HomePage() {
           </div>
 
           <p className="mt-6 md:mt-8 text-sm md:text-base text-yellow-200 px-4 font-bold">
-            📞 010-2417-7936 | ⏰ 평일 09:00 - 18:00
+            📞 010-2417-7936 | ⏰ 연중무휴 09:00 - 21:00
           </p>
 
           <p className="mt-4 text-xs md:text-sm text-yellow-300 px-4 animate-pulse">
