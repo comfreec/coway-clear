@@ -1125,6 +1125,9 @@ function AdminPage() {
                         type="checkbox"
                         id={`prospect-${app.id}`}
                         defaultChecked={app.isProspect || false}
+                        onChange={(e) => {
+                          updateStatus(app.id, app.status, e.target.checked);
+                        }}
                         className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
                       />
                       <span className="text-sm font-semibold text-purple-800">⭐ 가망고객</span>
@@ -1346,6 +1349,9 @@ function AdminPage() {
                               type="checkbox"
                               id={`desk-prospect-${app.id}`}
                               defaultChecked={app.isProspect || false}
+                              onChange={(e) => {
+                                updateStatus(app.id, app.status, e.target.checked);
+                              }}
                               className="w-3 h-3 text-purple-600 rounded focus:ring-purple-500"
                             />
                             <span className="text-purple-700 font-semibold">⭐ 가망</span>
