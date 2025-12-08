@@ -56,28 +56,107 @@ function HomePage() {
     }
   };
 
-  // Social Proof 가짜 데이터 (20명)
+  // Social Proof 가짜 데이터 (100명)
   const socialProofData = [
-    { name: '김민수', location: '서울 강남구', time: '방금 전' },
-    { name: '이지은', location: '부산 해운대구', time: '1분 전' },
-    { name: '박철수', location: '대구 수성구', time: '2분 전' },
-    { name: '최영희', location: '인천 남동구', time: '3분 전' },
-    { name: '정현우', location: '광주 서구', time: '5분 전' },
-    { name: '강수진', location: '대전 유성구', time: '7분 전' },
-    { name: '윤서연', location: '울산 남구', time: '10분 전' },
-    { name: '장동혁', location: '경기 성남시', time: '12분 전' },
-    { name: '한미영', location: '경기 용인시', time: '15분 전' },
-    { name: '오준호', location: '서울 송파구', time: '18분 전' },
-    { name: '신예린', location: '서울 마포구', time: '20분 전' },
-    { name: '임태훈', location: '경기 고양시', time: '25분 전' },
-    { name: '문지현', location: '인천 연수구', time: '30분 전' },
-    { name: '배성민', location: '부산 동래구', time: '35분 전' },
-    { name: '조은서', location: '대구 달서구', time: '40분 전' },
-    { name: '류현진', location: '경기 수원시', time: '45분 전' },
-    { name: '권나연', location: '서울 강서구', time: '50분 전' },
-    { name: '송지훈', location: '광주 북구', time: '55분 전' },
-    { name: '황민지', location: '대전 서구', time: '1시간 전' },
-    { name: '안재원', location: '울산 중구', time: '1시간 전' }
+    { name: '김민수', time: '방금 전' },
+    { name: '이지은', time: '1분 전' },
+    { name: '박철수', time: '2분 전' },
+    { name: '최영희', time: '3분 전' },
+    { name: '정현우', time: '5분 전' },
+    { name: '강수진', time: '7분 전' },
+    { name: '윤서연', time: '10분 전' },
+    { name: '장동혁', time: '12분 전' },
+    { name: '한미영', time: '15분 전' },
+    { name: '오준호', time: '18분 전' },
+    { name: '신예린', time: '20분 전' },
+    { name: '임태훈', time: '25분 전' },
+    { name: '문지현', time: '30분 전' },
+    { name: '배성민', time: '35분 전' },
+    { name: '조은서', time: '40분 전' },
+    { name: '류현진', time: '45분 전' },
+    { name: '권나연', time: '50분 전' },
+    { name: '송지훈', time: '55분 전' },
+    { name: '황민지', time: '1시간 전' },
+    { name: '안재원', time: '1시간 전' },
+    { name: '홍성호', time: '2분 전' },
+    { name: '고은아', time: '4분 전' },
+    { name: '양승민', time: '6분 전' },
+    { name: '손혜진', time: '8분 전' },
+    { name: '백지우', time: '9분 전' },
+    { name: '허준영', time: '11분 전' },
+    { name: '남다은', time: '13분 전' },
+    { name: '심유진', time: '14분 전' },
+    { name: '노태민', time: '16분 전' },
+    { name: '하서윤', time: '17분 전' },
+    { name: '곽민서', time: '19분 전' },
+    { name: '성재현', time: '21분 전' },
+    { name: '차윤아', time: '22분 전' },
+    { name: '주현수', time: '23분 전' },
+    { name: '우지훈', time: '24분 전' },
+    { name: '구민지', time: '26분 전' },
+    { name: '전수빈', time: '27분 전' },
+    { name: '엄지영', time: '28분 전' },
+    { name: '변현우', time: '29분 전' },
+    { name: '탁소연', time: '31분 전' },
+    { name: '석준호', time: '32분 전' },
+    { name: '피민수', time: '33분 전' },
+    { name: '설아영', time: '34분 전' },
+    { name: '도재훈', time: '36분 전' },
+    { name: '빈서현', time: '37분 전' },
+    { name: '지민우', time: '38분 전' },
+    { name: '진예은', time: '39분 전' },
+    { name: '나수민', time: '41분 전' },
+    { name: '여은지', time: '42분 전' },
+    { name: '채지원', time: '43분 전' },
+    { name: '명수아', time: '44분 전' },
+    { name: '길동현', time: '46분 전' },
+    { name: '왕민석', time: '47분 전' },
+    { name: '유하늘', time: '48분 전' },
+    { name: '방시우', time: '49분 전' },
+    { name: '표준혁', time: '51분 전' },
+    { name: '부유진', time: '52분 전' },
+    { name: '견지후', time: '53분 전' },
+    { name: '모서진', time: '54분 전' },
+    { name: '복민아', time: '56분 전' },
+    { name: '마준서', time: '57분 전' },
+    { name: '목다현', time: '58분 전' },
+    { name: '은채원', time: '59분 전' },
+    { name: '공서준', time: '1시간 전' },
+    { name: '가현진', time: '1시간 전' },
+    { name: '김도윤', time: '3분 전' },
+    { name: '이시우', time: '5분 전' },
+    { name: '박예준', time: '7분 전' },
+    { name: '최서연', time: '9분 전' },
+    { name: '정하윤', time: '11분 전' },
+    { name: '강지안', time: '13분 전' },
+    { name: '윤서준', time: '15분 전' },
+    { name: '장민재', time: '17분 전' },
+    { name: '한지호', time: '19분 전' },
+    { name: '오수아', time: '21분 전' },
+    { name: '신도현', time: '23분 전' },
+    { name: '임우진', time: '25분 전' },
+    { name: '문서윤', time: '27분 전' },
+    { name: '배지우', time: '29분 전' },
+    { name: '조예원', time: '31분 전' },
+    { name: '류서현', time: '33분 전' },
+    { name: '권민준', time: '35분 전' },
+    { name: '송채은', time: '37분 전' },
+    { name: '황시윤', time: '39분 전' },
+    { name: '안하준', time: '41분 전' },
+    { name: '홍지안', time: '43분 전' },
+    { name: '고서우', time: '45분 전' },
+    { name: '양도윤', time: '47분 전' },
+    { name: '손하은', time: '49분 전' },
+    { name: '백지훈', time: '51분 전' },
+    { name: '허채윤', time: '53분 전' },
+    { name: '남준우', time: '55분 전' },
+    { name: '심서아', time: '57분 전' },
+    { name: '노지훈', time: '59분 전' },
+    { name: '하윤서', time: '1시간 전' },
+    { name: '곽민서', time: '2분 전' },
+    { name: '성지우', time: '4분 전' },
+    { name: '차예진', time: '6분 전' },
+    { name: '주시현', time: '8분 전' }
   ];
 
   // 페이지 로드 시 스크롤을 맨 위로 + 설정 불러오기
@@ -98,24 +177,24 @@ function HomePage() {
     fetchSettings();
   }, []);
 
-  // Social Proof 알림 순환
+  // Social Proof 알림 순환 (랜덤)
   useEffect(() => {
-    // 3초 후 첫 알림 시작
+    // 5초 후 첫 알림 시작
     const startTimer = setTimeout(() => {
+      setCurrentNotificationIndex(Math.floor(Math.random() * socialProofData.length));
       setShowNotification(true);
-    }, 3000);
+    }, 5000);
 
     // 알림 순환 인터벌
     const interval = setInterval(() => {
       setShowNotification(false);
 
       setTimeout(() => {
-        setCurrentNotificationIndex(prev =>
-          (prev + 1) % socialProofData.length
-        );
+        // 랜덤하게 선택
+        setCurrentNotificationIndex(Math.floor(Math.random() * socialProofData.length));
         setShowNotification(true);
       }, 1000); // 1초 후 다음 알림
-    }, 8000); // 8초마다 변경
+    }, 18000); // 18초마다 변경 (빈도 줄임)
 
     return () => {
       clearTimeout(startTimer);
