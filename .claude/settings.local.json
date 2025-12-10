@@ -53,7 +53,10 @@
       "Bash(start https://vercel.com/comfreec/free-clean-mattress/deployments)",
       "WebFetch(domain:free-clean-mattress.vercel.app)",
       "WebFetch(domain:unsplash.com)",
-      "WebFetch(domain:www.pexels.com)"
+      "WebFetch(domain:www.pexels.com)",
+      "Bash(copy \"C:\\Users\\dev\\coway-clear\\client\\public\\images\\1.jpg\" \"C:\\Users\\dev\\coway-clear\\client\\src\\assets\\images\\1.jpg\")",
+      "Bash(copy \"C:\\Users\\dev\\coway-clear\\client\\public\\images\\2.jpg\" \"C:\\Users\\dev\\coway-clear\\client\\src\\assets\\images\\2.jpg\")",
+      "Bash(copy \"C:\\Users\\dev\\coway-clear\\client\\public\\images\\3.jpg\" \"C:\\Users\\dev\\coway-clear\\client\\src\\assets\\images\\3.jpg\")"
     ],
     "deny": [],
     "ask": []
