@@ -1681,7 +1681,7 @@ function AdminPage() {
 
                     // 빈 셀
                     for (let i = 0; i < firstDay; i++) {
-                      cells.push(<div key={`empty-${i}`} className="h-10 md:h-20"></div>);
+                      cells.push(<div key={`empty-${i}`} className="h-16 md:h-24"></div>);
                     }
 
                     // 날짜 셀
@@ -1695,7 +1695,7 @@ function AdminPage() {
                         <div
                           key={day}
                           onClick={() => setSelectedDate(dateStr)}
-                          className={`h-10 md:h-20 border rounded p-1 text-xs overflow-hidden cursor-pointer transition hover:bg-blue-100 ${
+                          className={`h-16 md:h-24 border rounded p-1 text-xs overflow-hidden cursor-pointer transition hover:bg-blue-100 ${
                             selectedDate === dateStr
                               ? 'bg-blue-200 border-blue-500 ring-2 ring-blue-500'
                               : appointments.length > 0
@@ -1715,12 +1715,17 @@ function AdminPage() {
                           {/* 데스크톱: 상세 표시 */}
                           <div className="hidden md:block">
                             {appointments.slice(0, 2).map((app, idx) => (
-                              <div key={idx} className="bg-blue-500 text-white rounded px-1 mb-0.5 truncate">
-                                {app.preferred_time} {app.name}
+                              <div key={idx} className="bg-blue-500 text-white rounded px-1 mb-0.5">
+                                <div className="truncate text-xs">
+                                  {app.preferred_time} {app.name}
+                                </div>
+                                <div className="truncate text-xs opacity-80">
+                                  {app.address}
+                                </div>
                               </div>
                             ))}
                             {appointments.length > 2 && (
-                              <div className="text-blue-600 font-bold">+{appointments.length - 2}건</div>
+                              <div className="text-blue-600 font-bold text-xs">+{appointments.length - 2}건</div>
                             )}
                           </div>
                         </div>
@@ -1784,8 +1789,9 @@ function AdminPage() {
                             {app.phone}
                           </a>
                         </div>
-                        <div className={`text-sm truncate ${app.status === 'completed' ? 'text-gray-400 line-through decoration-red-500 decoration-2' : 'text-gray-600'}`}>
-                          {app.address}
+                        <div className={`text-sm break-words ${app.status === 'completed' ? 'text-gray-400 line-through decoration-red-500 decoration-2' : 'text-gray-600'}`}>
+                          📍 {app.address}
+                          {app.detail_address && ` ${app.detail_address}`}
                         </div>
                         {app.memo && (
                           <div className={`text-sm mt-1 px-2 py-1 rounded ${app.status === 'completed' ? 'bg-gray-200 text-gray-500' : 'bg-yellow-100 text-yellow-800'}`}>
