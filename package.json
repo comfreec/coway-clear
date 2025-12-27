@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "cd server && npm run dev",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
+    "start": "cd server && npm start",
     "init-firestore": "node functions/init-firestore.js"
   },
   "dependencies": {
