@@ -1,16 +1,10 @@
 {
   "name": "coway-mattress-app",
   "version": "1.0.0",
-  "type": "module",
+  "private": true,
   "scripts": {
+    "build": "npm install --prefix client && npm run build --prefix client",
     "dev": "cd server && npm run dev",
-    "build": "cd client && npm install && npm run build",
-    "start": "cd server && npm start",
-    "init-firestore": "node functions/init-firestore.js"
-  },
-  "dependencies": {
-    "firebase-admin": "^13.0.1",
-    "express": "^5.1.0",
-    "cors": "^2.8.5"
+    "start": "cd server && npm start"
   }
 }
